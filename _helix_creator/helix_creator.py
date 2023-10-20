@@ -8,19 +8,14 @@ import maya.mel as mel
 from maya import OpenMayaUI as omui
 from shiboken2 import wrapInstance
 from PySide2 import QtUiTools, QtCore, QtGui, QtWidgets
-
-
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 from functools import partial # optional, for passing args during signal function calls
 import sys, os, math, string
 
 class ValidationError(Exception):
     pass
-
-
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -159,14 +154,8 @@ class Ui_MainWindow(object):
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Helix Creator", None))
     # retranslateUi
 
-
-
-
-
 class mayaQT_rainbow_helix(QtWidgets.QMainWindow):
-    """
-    Create a default tool window.
-    """
+
     window = None
     
     def __init__(self, parent = None):
@@ -198,7 +187,6 @@ class mayaQT_rainbow_helix(QtWidgets.QMainWindow):
         self.btn_help = self.findChild(QtWidgets.QPushButton, 'btn_help')
         self.btn_closeWindow = self.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
 
-
         ###
         ###
         # assign clicked handler to buttons
@@ -207,10 +195,6 @@ class mayaQT_rainbow_helix(QtWidgets.QMainWindow):
 
         self.btn_help.clicked.connect(self.helpButton)
         self.btn_closeWindow.clicked.connect(self.closeWindow)
-
-    """
-    Your code goes here
-    """
 
     def rainbowHelix(self):
 
@@ -221,7 +205,6 @@ class mayaQT_rainbow_helix(QtWidgets.QMainWindow):
         sphereSpread = self.spinBox_sphereSpread.value()
         helixRadius = self.spinBox_helixRadius.value()
         parentGroupSpeed = self.spinBox_parentGroupSpeed.value()
-
 
         helixGroupPrefix = str(self.UTIL_helixGroupPrefix()) + '_'
 
@@ -308,9 +291,6 @@ class mayaQT_rainbow_helix(QtWidgets.QMainWindow):
         url = QtCore.QUrl('https://github.com/BlakeXYZ/Maya-Tools/tree/main/_helix_creator#readme')
         QtGui.QDesktopServices.openUrl(url)
 
-
-
-
     def UTIL_helixGroupPrefix(self):
         # Search for existing 'helix_Group' with a prefix
         existing_groups = cmds.ls('*' + 'helix_Group' + '*', type='transform')
@@ -336,8 +316,7 @@ class mayaQT_rainbow_helix(QtWidgets.QMainWindow):
                 helixGroupPrefix = string.ascii_uppercase[(string.ascii_uppercase.index(last_prefix) + 1) % 26]
 
         return(helixGroupPrefix)
-
-        
+ 
     def closeWindow(self):
         """
         Close window.
@@ -364,6 +343,5 @@ def openWindow():
     mayaQT_rainbow_helix.window.setWindowTitle('Helix Creator')
     mayaQT_rainbow_helix.window.show()
     
-
 if __name__ == '__main__':
     openWindow()
