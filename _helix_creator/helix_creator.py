@@ -1,7 +1,7 @@
-"""
-Maya/QT UI template
-Maya 2024
-"""
+## 
+# See More Tech Art Tools @ https://github.com/BlakeXYZ
+# Cheers, BlakeXYZ
+##
 
 import maya.cmds as cmds
 import maya.mel as mel
