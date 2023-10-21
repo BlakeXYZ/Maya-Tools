@@ -9,6 +9,16 @@
 
 ### Installation
 
+
+   - Download '[Maya-Tools](https://github.com/BlakeXYZ/Maya-Tools/tree/main)' Repo
+   - Extract _auto_material_instancer Folder 
+
+
+<p align="center">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/d413def4-3ad0-42b9-b891-9e8a496e0767">
+</p>
+
+
 Explain how to install or set up your tool. Include any prerequisites or dependencies that need to be installed before using the tool. Provide step-by-step instructions if necessary.
 
 ### Quick Start
