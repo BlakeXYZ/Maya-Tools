@@ -9,6 +9,9 @@ A Simple Tool to Create Helixes. Foundational knowledge thanks to [Isaac Oster](
 
 </div>
 
+<p align="center">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/1989a23e-d74f-4114-a47f-066bb95905a0" width="900">
+</p>
 
 #### Built with:
 - Python 3
@@ -90,4 +93,40 @@ ____________
 <br>
 <br>
 
----
+______
+## <ins>Documentation</ins>
+
+- Intelligent Prefix Namespacing
+
+<p align="center">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/da4b0c48-1b6b-4531-88ad-9597477bea76" width="300" >
+</p>
+
+```py
+    def UTIL_helixGroupPrefix(self):
+        # Search for existing 'helix_Group' with a prefix
+        existing_groups = cmds.ls('*' + 'helix_Group' + '*', type='transform')
+
+        # Extract the existing prefixes
+        existing_prefixes = [group.split('_')[0] for group in existing_groups]
+
+        # If there are no existing groups, start with 'A' as the default
+        if not existing_prefixes:
+            helixGroupPrefix = 'A'
+        else:
+            # Sort the existing prefixes
+            existing_prefixes.sort()
+
+            # Find the first available letter in the sequence
+            for letter in string.ascii_uppercase:
+                if letter not in existing_prefixes:
+                    helixGroupPrefix = letter
+                    break
+            else:
+                # If all letters are taken, use the next letter after 'Z' ('AA', 'AB', etc.)
+                last_prefix = existing_prefixes[-1]
+                helixGroupPrefix = string.ascii_uppercase[(string.ascii_uppercase.index(last_prefix) + 1) % 26]
+
+        return(helixGroupPrefix)
+```
+
