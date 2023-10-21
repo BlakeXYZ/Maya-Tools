@@ -88,7 +88,7 @@ ____________
 
 - Press Play inside the Time Slider to play Expression Editor Animation
 <p align="center">
-<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/74408d02-6e81-46db-abda-5043df70b7cf" width="500" >
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/74408d02-6e81-46db-abda-5043df70b7cf" width="400" >
 </p>
 <br>
 <br>
