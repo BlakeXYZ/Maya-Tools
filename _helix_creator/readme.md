@@ -11,7 +11,7 @@
 
 
    - Download '[Maya-Tools](https://github.com/BlakeXYZ/Maya-Tools/tree/main)' Repo
-   - Extract _auto_material_instancer Folder 
+   - Extract _auto_helix_creator Folder 
 
 
 <p align="center">
