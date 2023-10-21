@@ -3,25 +3,61 @@
 ## Overview
 
 
-<div align="center">A Simple Tool to Create Helixes.
+<div align="center"> 
+   
+A Simple Tool to Create Helixes. Foundational knowledge thanks to [Isaac Oster](https://isaacoster.gumroad.com/l/oUpTB?layout=profile&recommended_by=library)
+
 </div>
+
+
+
 
 
 ### Installation
 
 
-   - Download '[Maya-Tools](https://github.com/BlakeXYZ/Maya-Tools/tree/main)' Repo
-   - Extract _auto_helix_creator Folder 
-
+   1. Download '[Maya-Tools](https://github.com/BlakeXYZ/Maya-Tools/tree/main)' Repo
 
 <p align="center">
-<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/45325716-8ac3-4ed6-a5e6-0bb5f07eecec">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/45325716-8ac3-4ed6-a5e6-0bb5f07eecec" width="700">
+</p>
+
+   2. Extract **helix_creator.py** File
+   3. Copy **helix_creator.py** to:
+     
+   Windows
+```
+\Users\USERNAME\Documents\maya\MAYAVERSION\scripts
+```
+   Linux
+```
+$HOME/maya/MAYAVERSION/scripts
+```
+   Mac
+```
+$HOME/Library/Preferences/Autodesk/maya/MAYAVERSION/scripts
+```
+   4. Launch / Restart Maya
+   5. Inside Script Editor, run:
+```py
+try:
+    import helix_creator
+except ImportError as e:
+    print("Import failed:", e)
+    
+helix_creator.openWindow()
+```
+<p align="center">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/22b6fd4d-bad7-4729-9c95-d66507228db3" width="300">
 </p>
 
 
 
+    
 
-Explain how to install or set up your tool. Include any prerequisites or dependencies that need to be installed before using the tool. Provide step-by-step instructions if necessary.
+
+
+
 
 ### Quick Start
 
