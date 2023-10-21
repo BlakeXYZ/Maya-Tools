@@ -1,6 +1,6 @@
 # Helix Creator
 
-## Overview
+## <ins>Overview</ins>
 
 
 <div align="center"> 
@@ -10,10 +10,15 @@ A Simple Tool to Create Helixes. Foundational knowledge thanks to [Isaac Oster](
 </div>
 
 
+#### Built with:
+- Python 3
+- Maya integrated PySide2
+- Qt Designer
 
+<br>
 
-
-### Installation
+______
+## <ins>Installation</ins>
 
 
    1. Download '[Maya-Tools](https://github.com/BlakeXYZ/Maya-Tools/tree/main)' Repo
@@ -51,15 +56,8 @@ helix_creator.openWindow()
 <img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/22b6fd4d-bad7-4729-9c95-d66507228db3" width="300">
 </p>
 
-
-
-    
-
-
-
-
-
-### Quick Start
+____________
+## <ins>Quick Start</ins>
 
 <br>
 
@@ -85,8 +83,11 @@ helix_creator.openWindow()
 <img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/6de8f1a1-50c1-436b-8faa-e5c2e6a716c4">
 </p>
 
+- Press Play inside the Time Slider to play Expression Editor Animation
+<p align="center">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/74408d02-6e81-46db-abda-5043df70b7cf" width="500" >
+</p>
+<br>
+<br>
 
-
-### Documentation
-
-Provide a link to more detailed documentation if it exists. This could be a link to a separate documentation file or an external website. Include information on where users can find additional resources, tutorials, or support.
+---
