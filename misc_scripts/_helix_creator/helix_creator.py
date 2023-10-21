@@ -288,7 +288,7 @@ class mayaQT_rainbow_helix(QtWidgets.QMainWindow):
  
     def helpButton(self):
         # Replace 'https://example.com' with the actual URL you want to open
-        url = QtCore.QUrl('https://github.com/BlakeXYZ/Maya-Tools/tree/main/_helix_creator#readme')
+        url = QtCore.QUrl('https://github.com/BlakeXYZ/Maya-Tools/tree/main/misc_scripts/_helix_creator#quick-start')
         QtGui.QDesktopServices.openUrl(url)
 
     def UTIL_helixGroupPrefix(self):
