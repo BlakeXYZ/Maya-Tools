@@ -19,7 +19,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools, QtCore, QtGui, QtWidgets
 
-class Ui_MainWindow(object):
+class Ui_MainWindow(object):                                    # compiled Ui_MainWindow.ui
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
@@ -100,7 +100,7 @@ class Ui_MainWindow(object):
         self.btn_openSettings.setText(QCoreApplication.translate("MainWindow", u"\u2699\ufe0f", None))
     # retranslateUi
 
-class Ui_settingsMainWindow(object):
+class Ui_settingsMainWindow(object):                            # compiled Ui_settingsMainWindow.ui
     def setupUi(self, settingsMainWindow):
         if not settingsMainWindow.objectName():
             settingsMainWindow.setObjectName(u"settingsMainWindow")
@@ -161,7 +161,7 @@ class Ui_settingsMainWindow(object):
         self.settings_btn_save.setText(QCoreApplication.translate("settingsMainWindow", u"Save", None))
         self.settings_btn_closeWindow.setText(QCoreApplication.translate("settingsMainWindow", u"Close", None))
     # retranslateUi
-
+                                                                                                 
 snippet = """A crocodile cannot stick its tongue out.
 A shrimp's heart is in its head.
 The "sixth sick sheik's sixth sheep's sick" is believed to be the toughest tongue twister in the English language.
@@ -347,7 +347,7 @@ A dime has 118 ridges around the edge."""
 class ValidationError(Exception):
     pass
 
-def last_launched_threshold() -> bool:
+def last_launched_threshold() -> bool:                          # parse last_launched time and see if threshold is met
 
     # Get Current Working Directory
     # script_directory passed from userSetup!
@@ -396,19 +396,19 @@ def last_launched_threshold() -> bool:
         # print("Updated stored_time in path: ", datetime_json_path)
         return True
     
-def get_random_fact(snippet: str) -> str:
+def get_random_fact(snippet: str) -> str:                       # organize snippet into list and randomly select a fact
 
+    # Split Snippet Lines and append into List
     lines = snippet.splitlines()
     list_of_facts = []
-
     for line in lines:
         list_of_facts.append(line)
 
+    # return a randomly selected List Item
     random_fact = random.choice(list_of_facts)
-
     return random_fact
 
-class yourDailyFunFact(QtWidgets.QMainWindow):
+class yourDailyFunFact(QtWidgets.QMainWindow):                  # QMainWindow for Tool
     """
     Create a default tool window.
     """
@@ -443,8 +443,6 @@ class yourDailyFunFact(QtWidgets.QMainWindow):
         self.btn_closeWindow.clicked.connect(self.closeWindow)
         self.btn_openSettings.clicked.connect(self.openSettings)
 
-
-
         # Set label_fun_fact Text 
         self.label_fun_fact.setText(my_random_fact)
 
@@ -452,11 +450,9 @@ class yourDailyFunFact(QtWidgets.QMainWindow):
         content_size = self.sizeHint()
         self.resize(content_size.width() * 1.2, content_size.height() * 1.2)
 
-
     def openSettings(self):
 
         openSettingsWindow()
-
         
     def closeWindow(self):
         """
@@ -473,7 +469,7 @@ class yourDailyFunFact(QtWidgets.QMainWindow):
         print ('closing window')
         self.destroy()
 
-class settingsWindow(QtWidgets.QMainWindow):
+class settingsWindow(QtWidgets.QMainWindow):                    # QMainWindow for Settings 
     """
     Create a default tool window.
     """
@@ -510,8 +506,6 @@ class settingsWindow(QtWidgets.QMainWindow):
         self.settings_btn_save.clicked.connect(self.saveSettings)
         self.settings_btn_closeWindow.clicked.connect(self.closeWindow)
         
-
-
         ###
         ###
         # Parse stored Threshold and Update settings_spinBox_threshold
@@ -535,13 +529,6 @@ class settingsWindow(QtWidgets.QMainWindow):
             raise ValidationError(f'Unable to load the JSON file.')
 
         self.settings_spinBox_threshold.setValue(stored_threshold)
-
-
-
-    
-    """
-    Your code goes here
-    """
 
     def saveSettings(self):
 
@@ -569,14 +556,13 @@ class settingsWindow(QtWidgets.QMainWindow):
 
         self.destroy()
 
-        
     def closeWindow(self):
         """
         Close window.
         """
         self.destroy()
       
-def openMainWindow(my_random_fact):
+def openMainWindow(my_random_fact):                             # Called inside run() to open GUI
     """
     ID Maya and attach tool window.
     """
@@ -595,7 +581,7 @@ def openMainWindow(my_random_fact):
     yourDailyFunFact.window.setWindowTitle('Your Daily Fun Fact')
     yourDailyFunFact.window.show()
 
-def openSettingsWindow():
+def openSettingsWindow():                                       # Called inside yourDailyFunFact instance to open Settings
     """
     ID Maya and attach tool window.
     """
