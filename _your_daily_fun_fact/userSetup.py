@@ -12,16 +12,4 @@ scriptJobID = cmds.scriptJob(e=["SceneOpened", lambda script_directory=script_di
 
 
 
-# Define a function to run an external script
-# def runScript(yourDailyFunFact_path):
-#     try:
-#         with open(yourDailyFunFact_path, 'r') as file:
-#             script_contents = file.read()
-#             exec(script_contents, globals())
-#     except Exception as e:
-#         print("Error running script:", str(e))
-
-
-
-
 
