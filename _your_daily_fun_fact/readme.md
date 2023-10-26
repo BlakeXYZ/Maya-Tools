@@ -40,7 +40,7 @@ ______
 
    4. Copy **Files** to:
 
-> ❗ If your /scripts path already contains userSetup.py
+> ❗ If your /scripts path already contains custom userSetup.py, copy paste '**_your_daily_fun_fact**' userSetup.py **<em>code</em>** to prevent overwriting 
      
    Windows
 ```
