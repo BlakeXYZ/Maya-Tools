@@ -1,7 +1,7 @@
  ---
  ### Your Daily Fun Fact
 
-[GitHub Page](https://github.com/BlakeXYZ/Maya-Tools/blob/main/_your_daily_fun_fact/readme.md) - Recieve Daily Fun Facts on Maya Startup! The tool offers persistent settings to adjust Time Interval between each Fun Fact. 
+[GitHub Page](https://github.com/BlakeXYZ/Maya-Tools/blob/main/_your_daily_fun_fact/readme.md) - Receive Daily Fun Facts on Maya Startup! The tool offers persistent settings to adjust Time Interval between each Fun Fact. 
 
 
 <p align="center">  
