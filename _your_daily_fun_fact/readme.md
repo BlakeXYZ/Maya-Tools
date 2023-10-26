@@ -3,7 +3,7 @@
 ## <ins>Overview</ins>
 
 <div align="center"> 
-Recieve Daily Fun Facts on Maya Startup! The tool offers persistent settings to adjust Time Interval between each Fun Fact.
+Receive Daily Fun Facts on Maya Startup! The tool offers persistent settings to adjust Time Interval between each Fun Fact.
 </div>
 <br>
 
