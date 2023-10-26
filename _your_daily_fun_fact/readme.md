@@ -38,8 +38,9 @@ ______
 <img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/bf907f11-dbcc-4464-99f2-a4e04e03ce94" width="500">
 </p>
 
-
    4. Copy **Files** to:
+
+> ❗ If your /scripts path already contains userSetup.py
      
    Windows
 ```
