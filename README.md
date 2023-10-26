@@ -1,6 +1,3 @@
-<h3>A Collection of Python Pipeline Tools for Maya</h3>
-
-
  ---
  ### Your Daily Fun Fact
 
