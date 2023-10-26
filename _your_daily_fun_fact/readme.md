@@ -32,8 +32,14 @@ ______
 <img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/45325716-8ac3-4ed6-a5e6-0bb5f07eecec" width="700">
 </p>
 
-   2. Extract **helix_creator.py** File
-   3. Copy **helix_creator.py** to:
+   2. Extract '**_your_daily_fun_fact**' Files
+
+<p align="center">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/bf907f11-dbcc-4464-99f2-a4e04e03ce94" width="500">
+</p>
+
+
+   4. Copy **Files** to:
      
    Windows
 ```
@@ -47,7 +53,7 @@ $HOME/maya/MAYAVERSION/scripts
 ```
 $HOME/Library/Preferences/Autodesk/maya/MAYAVERSION/scripts
 ```
-   4. Launch / Restart Maya
+   5. Launch / Restart Maya
 
 ____________
 ## <ins>Quick Start</ins>
