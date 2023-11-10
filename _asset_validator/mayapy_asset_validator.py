@@ -1,3 +1,5 @@
+
+
 """
 Maya/QT UI template
 Maya 2024
@@ -31,7 +33,7 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
         # Get the directory where the script is located
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        ui_dir = os.path.join(script_dir, 'mayapy_QT_boilerplate.ui')
+        ui_dir = os.path.join(script_dir, 'mayapy_asset_validator.ui')
         #load the created UI widget
         self.mainWidget = QtUiTools.QUiLoader().load(ui_dir)
     
