@@ -1,6 +1,6 @@
 //Maya ASCII 2024 scene
 //Name: asset_validation_test_01.ma
-//Last modified: Thu, Nov 09, 2023 11:45:39 PM
+//Last modified: Fri, Nov 10, 2023 01:06:21 AM
 //Codeset: 1252
 requires maya "2024";
 currentUnit -l centimeter -a degree -t film;
@@ -9,7 +9,7 @@ fileInfo "product" "Maya 2024";
 fileInfo "version" "2024";
 fileInfo "cutIdentifier" "202304191415-7fa20164c6";
 fileInfo "osv" "Windows 10 Home v2009 (Build: 19045)";
-fileInfo "UUID" "8B146A8F-45FD-EAA0-9856-F09149E2D933";
+fileInfo "UUID" "D6A446A7-4A28-C16E-8745-1D8B2BCD8367";
 createNode transform -s -n "persp";
 	rename -uid "54857DFA-4077-49A6-F46A-56A088AB4E18";
 	setAttr ".v" no;
