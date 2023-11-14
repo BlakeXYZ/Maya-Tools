@@ -55,6 +55,8 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
         self.btn_closeWindow = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
 
+        self.label_bg_color_test = self.mainWidget.findChild(QtWidgets.QLabel, 'label_bg_color_test')
+
 
         
         
@@ -66,19 +68,49 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.btn_closeWindow.clicked.connect(self.closeWindow)
 
 
+        self.validator = True
+
+        self.validation_StyleSheet('label_bg_color_test', self.validator)
+
+
+
+
+
+
     
     """
     Your code goes here
     """
 
+    def validation_StyleSheet(self, ui_name, validation_check):
+
+        ui_widget = getattr(self, ui_name)
+
+        icon_confirm = QtGui.QPixmap(f':/confirm.png').scaledToHeight(32)
+        icon_error = QtGui.QPixmap(f':/error.png').scaledToHeight(32)
+
+
+        if validation_check == True:
+            ui_widget.setPixmap(icon_confirm)
+        elif validation_check == False:
+            ui_widget.setPixmap(icon_error)
+        else:
+            ui_widget.setStyleSheet('background-color: black')
+
+
+
+
+
+
+
+
     def cubeOfSpheres(self):
 
-        for i in range (0,5):
-            for j in range (0,5):
-                for k in range (0,5):
+        self.validator = not self.validator
 
-                    cmds.sphere(r=0.5)
-                    cmds.move(i, j*2, k, r=True) 
+        print(self.validator) 
+
+        self.validation_StyleSheet('label_bg_color_test', self.validator)
 
 
             
