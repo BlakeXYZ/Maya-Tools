@@ -45,8 +45,6 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 				# Set initial Window Size
         self.adjustSize()
 
-
-        ###
         ###
         # find interactive elements of UI
 
@@ -54,27 +52,31 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.label_validate_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_single_asset_in_scene')
 
         self.btn_closeWindow = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
-
-
-
-
+        self.btn_collapse_test = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_collapse_test')
         
-        
-        ###
         ###
         # assign clicked handler to buttons
-
         self.btn_closeWindow.clicked.connect(self.closeWindow)
+        self.btn_collapse_test.clicked.connect(self.toggle_output_log)
 
-
-        ###
         ### 
-        
+        # VALIDATION calls
         self.label_loaded_asset_name.setText(self.get_asset_name())
-        
         self.validate_single_asset_in_scene()
 
+        ###
+        # OUTPUT LOG 
 
+        self.widget_toggle_output_log = self.mainWidget.findChild(QtWidgets.QWidget, 'widget_toggle_output_log')
+        self.label_toggle_output_log = self.mainWidget.findChild(QtWidgets.QLabel, 'label_toggle_output_log')
+        self.label_toggle_output_log_text = self.mainWidget.findChild(QtWidgets.QLabel, 'label_toggle_output_log_text')
+        self.textEdit_output_log = self.mainWidget.findChild(QtWidgets.QTextEdit, 'textEdit_output_log')
+
+        self.label_toggle_output_log_text.setStyleSheet("font-weight: bold;")
+        self.label_toggle_output_log.setPixmap(QtGui.QPixmap(f':/teDownArrow.png').scaledToHeight(12))
+
+            # Install an event filter on the child widget
+        self.widget_toggle_output_log.installEventFilter(self)
 
 
 
@@ -122,8 +124,6 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 #         def UTILITY_move_consoleLog_cursor_to_end(self): inside ue-tools > importTextures.py
 #           
 
-#TODO: Setup collapsible widget to show and hide output log
-
     def validation_StyleSheet(self, ui_name, validation_check):
 
         ui_widget = getattr(self, ui_name)
@@ -139,8 +139,41 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         else:
             ui_widget.setStyleSheet('background-color: black')
 
-
+    def toggle_output_log(self):
             
+        icon_collapsed = QtGui.QPixmap(f':/teRightArrow.png').scaledToHeight(12)
+        icon_expanded = QtGui.QPixmap(f':/teDownArrow.png').scaledToHeight(12)
+
+        current_visibility = self.textEdit_output_log.isVisible()
+        self.textEdit_output_log.setVisible(not current_visibility)
+
+        if current_visibility:
+            self.label_toggle_output_log.setPixmap(icon_collapsed)
+        else:
+            self.label_toggle_output_log.setPixmap(icon_expanded)
+
+
+    def eventFilter(self, obj, event):
+
+        # if child widget_toggle_output_log widget clicked
+        if obj == self.widget_toggle_output_log and event.type() == QtCore.QEvent.Type.MouseButtonRelease:
+            self.toggle_output_log()
+
+            return True  # Event handled
+        return super().eventFilter(obj, event)
+
+
+
+
+
+
+
+
+
+
+
+
+
     def resizeEvent(self, event):
         """
         Called on automatically generated resize event
