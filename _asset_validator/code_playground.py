@@ -14,54 +14,41 @@ class ValidationError(Exception):
 #     raise ValidationError(f'Please select only 1 Master Material in Content Browser')
 
 
-
-# print('hello world')
-
-
-# # List all geometry
-# list_geo = cmds.ls(geometry=True)
-# mesh_info = list_geo[0]
-
-# # Use listRelatives to get the parent of the object
-# transform_info = cmds.listRelatives(mesh_info, parent=True)[0]
-# asset_name = transform_info
-
+#################
 #################
 
-# print(transform_info)
-
-# # List all attributes of 'myCubeShape'
-# attributes = cmds.listAttr(transform_info)
-# print(attributes)
-
-# object_type = cmds.objectType(mesh_info)
-# print('Object Type:', object_type)
-
-# print(cmds.getAttr(myGeo + '.visibility'))
-
-# cmds.setAttr(myGeo + '.visibility', True)
+print('--- hello world ---')
 
 
+# List all geometry
+list_geo = cmds.ls(geometry=True)
+mesh_info = list_geo[0]
 
-# #################
-# ##                                                                                                        Validation - Missing Asset in Scene
+# Use listRelatives to get the parent of the object
+transform_info = cmds.listRelatives(mesh_info, parent=True)[0]
+asset_name = transform_info
 
-## IF VALIDATION passes, allow to continue with rest of Tool Use
+print(asset_name)
 
-# # List all geometry
-# list_geo = cmds.ls(geometry=True)
+################
+##                                                                                                        Validation - Missing Asset in Scene
+
+# IF VALIDATION passes, allow to continue with rest of Tool Use
+
+# List all geometry
+list_geo = cmds.ls(geometry=True)
 
 
-# def is_asset_in_scene(list_geo): # check if single asset is inside scene VALIDATION FUNCTION
-#     print('hello world')
-#     print(f'list_geo length {len(list_geo)}')
+def is_asset_in_scene(list_geo): # check if single asset is inside scene VALIDATION FUNCTION
 
-#     if len(list_geo) == 1:
-#         return True
-#     else:
-#         return False
+    print(f'list_geo length {len(list_geo)}')
 
-# print(is_asset_in_scene(list_geo))
+    if len(list_geo) == 1:
+        return True
+    else:
+        return False
+
+print(is_asset_in_scene(list_geo))
 
 
 
@@ -262,20 +249,6 @@ class ValidationError(Exception):
 # else:
 #     print('No unused Shading Groups found... do something else')
 
-
-#################
-#################
-
-print('--- hello world ---')
-
-
-# List all geometry
-list_geo = cmds.ls(geometry=True)
-mesh_info = list_geo[0]
-
-# Use listRelatives to get the parent of the object
-transform_info = cmds.listRelatives(mesh_info, parent=True)[0]
-asset_name = transform_info
 
 # #################
 # ##                                                                                                        Validation - Choose Asset Type (JSON storage)

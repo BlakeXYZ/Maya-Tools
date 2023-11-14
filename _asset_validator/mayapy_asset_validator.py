@@ -50,12 +50,12 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         ###
         # find interactive elements of UI
 
-
-        self.pushButton = self.mainWidget.findChild(QtWidgets.QPushButton, 'pushButton')
+        self.label_loaded_asset_name = self.mainWidget.findChild(QtWidgets.QLabel, 'label_loaded_asset_name')
+        self.label_validate_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_single_asset_in_scene')
 
         self.btn_closeWindow = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
 
-        self.label_bg_color_test = self.mainWidget.findChild(QtWidgets.QLabel, 'label_bg_color_test')
+
 
 
         
@@ -64,14 +64,15 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         ###
         # assign clicked handler to buttons
 
-        self.pushButton.clicked.connect(self.cubeOfSpheres)
         self.btn_closeWindow.clicked.connect(self.closeWindow)
 
 
-        self.validator = True
-
-        self.validation_StyleSheet('label_bg_color_test', self.validator)
-
+        ###
+        ### 
+        
+        self.label_loaded_asset_name.setText(self.get_asset_name())
+        
+        self.validate_single_asset_in_scene()
 
 
 
@@ -81,6 +82,47 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
     """
     Your code goes here
     """
+
+    def get_asset_name(self):
+
+        # List all geometry
+        list_geo = cmds.ls(geometry=True)
+        mesh_info = list_geo[0]
+
+        # Use listRelatives to get the parent of the object
+        transform_info = cmds.listRelatives(mesh_info, parent=True)[0]
+        asset_name = transform_info
+
+        return asset_name
+    
+################
+##                                                                                                        Validation - Missing Asset in Scene and/or too many assets in scene
+
+    def validate_single_asset_in_scene(self):
+        # IF VALIDATION passes, allow to continue with rest of Tool Use
+
+        self.single_asset_in_scene = False
+
+        # List all geometry
+        list_geo = cmds.ls(geometry=True)
+
+        # check if single asset is inside scene VALIDATION FUNCTION
+
+        if len(list_geo) == 1:
+            self.single_asset_in_scene = True
+        elif len(list_geo) > 1:
+            self.single_asset_in_scene = False
+        else:
+            self.single_asset_in_scene = False
+
+        self.validation_StyleSheet('label_validate_single_asset_in_scene', self.single_asset_in_scene)
+
+#TODO: Setup Output Log... find old code in repo that sets up Log to print at bottom and always keep log scrolled to bottom
+#
+#         def UTILITY_move_consoleLog_cursor_to_end(self): inside ue-tools > importTextures.py
+#           
+
+#TODO: Setup collapsible widget to show and hide output log
 
     def validation_StyleSheet(self, ui_name, validation_check):
 
@@ -96,21 +138,6 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
             ui_widget.setPixmap(icon_error)
         else:
             ui_widget.setStyleSheet('background-color: black')
-
-
-
-
-
-
-
-
-    def cubeOfSpheres(self):
-
-        self.validator = not self.validator
-
-        print(self.validator) 
-
-        self.validation_StyleSheet('label_bg_color_test', self.validator)
 
 
             
