@@ -17,7 +17,9 @@ class ValidationError(Exception):
 #################
 #################
 
-print('--- hello world ---')
+def test_function():
+
+    print('--- hello world ---')
 
 
 # List all geometry
@@ -28,7 +30,7 @@ mesh_info = list_geo[0]
 transform_info = cmds.listRelatives(mesh_info, parent=True)[0]
 asset_name = transform_info
 
-print(asset_name)
+# print(asset_name)
 
 ################
 ##                                                                                                        Validation - Missing Asset in Scene
@@ -48,7 +50,7 @@ def is_asset_in_scene(list_geo): # check if single asset is inside scene VALIDAT
     else:
         return False
 
-print(is_asset_in_scene(list_geo))
+# print(is_asset_in_scene(list_geo))
 
 
 

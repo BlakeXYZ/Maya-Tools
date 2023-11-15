@@ -4,6 +4,9 @@
 Maya/QT UI template
 Maya 2024
 """
+import sys
+import os 
+import importlib     
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -11,7 +14,9 @@ from maya import OpenMayaUI as omui
 from shiboken2 import wrapInstance
 from PySide2 import QtUiTools, QtCore, QtGui, QtWidgets
 from functools import partial # optional, for passing args during signal function calls
-import sys, os
+
+from utils import mayapy_asset_validator_utils
+importlib.reload(mayapy_asset_validator_utils)           # Reloads imported .py file, without, edits to this imported file will not carry over
 
 class ValidationError(Exception):
     pass
@@ -85,13 +90,11 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         current_consoleLog =  self.textEdit_output_log.toHtml()
         self.textEdit_output_log.setHtml(f'{current_consoleLog} hello')
 
-        self.UTILITY_move_consoleLog_cursor_to_end()
+        self.UTILITY_move_output_log_cursor_to_end()
 
-    def UTILITY_move_consoleLog_cursor_to_end(self):
-        cursor = self.textEdit_output_log.textCursor()
-        cursor.movePosition(cursor.End)
-        self.textEdit_output_log.setTextCursor(cursor)
-        self.textEdit_output_log.ensureCursorVisible()    
+        mayapy_asset_validator_utils.test_function()
+
+
 
     """
     Your code goes here
@@ -138,13 +141,6 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
 #TODO: VALIDATE Button, (refreshes asset) 
 
-
-
-#TODO: Setup Output Log... find old code in repo that sets up Log to print at bottom and always keep log scrolled to bottom
-#
-#         def UTILITY_move_consoleLog_cursor_to_end(self): inside ue-tools > importTextures.py
-#           
-
     def validation_StyleSheet(self, ui_name, validation_check):
 
         ui_widget = getattr(self, ui_name)
@@ -160,6 +156,11 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         else:
             ui_widget.setStyleSheet('background-color: black')
 
+
+    """
+    OUTPUT LOG FUNCTIONS
+    """
+
     def toggle_output_log(self):
             
         icon_collapsed = QtGui.QPixmap(f':/teRightArrow.png').scaledToHeight(12)
@@ -174,6 +175,13 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
             self.label_toggle_output_log.setPixmap(icon_expanded)
 
 
+    def UTILITY_move_output_log_cursor_to_end(self):
+        cursor = self.textEdit_output_log.textCursor()
+        cursor.movePosition(cursor.End)
+        self.textEdit_output_log.setTextCursor(cursor)
+        self.textEdit_output_log.ensureCursorVisible()    
+
+
     def eventFilter(self, obj, event):
 
         # if child widget_toggle_output_log widget clicked
@@ -185,6 +193,7 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
 
     """
+    BASE FUNCTIONS
     """
 
     def resizeEvent(self, event):
