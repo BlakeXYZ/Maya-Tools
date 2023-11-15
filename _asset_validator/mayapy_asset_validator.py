@@ -52,17 +52,12 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.label_validate_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_single_asset_in_scene')
 
         self.btn_closeWindow = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
-        self.btn_collapse_test = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_collapse_test')
+        self.btn_print_to_output_log = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_print_to_output_log')
         
         ###
         # assign clicked handler to buttons
         self.btn_closeWindow.clicked.connect(self.closeWindow)
-        self.btn_collapse_test.clicked.connect(self.toggle_output_log)
-
-        ### 
-        # VALIDATION calls
-        self.label_loaded_asset_name.setText(self.get_asset_name())
-        self.validate_single_asset_in_scene()
+        self.btn_print_to_output_log.clicked.connect(self.print_to_output_log)
 
         ###
         # OUTPUT LOG 
@@ -75,12 +70,29 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.label_toggle_output_log_text.setStyleSheet("font-weight: bold;")
         self.label_toggle_output_log.setPixmap(QtGui.QPixmap(f':/teDownArrow.png').scaledToHeight(12))
 
-            # Install an event filter on the child widget
-        self.widget_toggle_output_log.installEventFilter(self)
+        self.widget_toggle_output_log.installEventFilter(self)   # Install an event filter on the child widget
 
+        ### 
+        # VALIDATION calls
+        self.label_loaded_asset_name.setText(self.get_asset_name())
+        self.validate_single_asset_in_scene()
 
+    """
+    Playground Code
+    """
+    def print_to_output_log(self):
 
-    
+        current_consoleLog =  self.textEdit_output_log.toHtml()
+        self.textEdit_output_log.setHtml(f'{current_consoleLog} hello')
+
+        self.UTILITY_move_consoleLog_cursor_to_end()
+
+    def UTILITY_move_consoleLog_cursor_to_end(self):
+        cursor = self.textEdit_output_log.textCursor()
+        cursor.movePosition(cursor.End)
+        self.textEdit_output_log.setTextCursor(cursor)
+        self.textEdit_output_log.ensureCursorVisible()    
+
     """
     Your code goes here
     """
@@ -97,6 +109,11 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
         return asset_name
     
+
+
+ 
+#TODO: Setup UTILS.py and call in VALIDATIONs from there, help with code management
+       
 ################
 ##                                                                                                        Validation - Missing Asset in Scene and/or too many assets in scene
 
@@ -118,6 +135,10 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
             self.single_asset_in_scene = False
 
         self.validation_StyleSheet('label_validate_single_asset_in_scene', self.single_asset_in_scene)
+
+#TODO: VALIDATE Button, (refreshes asset) 
+
+
 
 #TODO: Setup Output Log... find old code in repo that sets up Log to print at bottom and always keep log scrolled to bottom
 #
@@ -163,16 +184,8 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         return super().eventFilter(obj, event)
 
 
-
-
-
-
-
-
-
-
-
-
+    """
+    """
 
     def resizeEvent(self, event):
         """

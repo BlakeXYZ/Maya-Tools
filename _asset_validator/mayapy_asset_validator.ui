@@ -34,7 +34,7 @@
      </layout>
     </item>
     <item row="3" column="0">
-     <widget class="QPushButton" name="btn_collapse_test">
+     <widget class="QPushButton" name="btn_print_to_output_log">
       <property name="text">
        <string>PushButton</string>
       </property>

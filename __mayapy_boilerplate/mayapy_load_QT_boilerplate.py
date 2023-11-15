@@ -14,3 +14,4 @@ import mayapy_QT_boilerplate
 
 importlib.reload(mayapy_QT_boilerplate)
 mayapy_QT_boilerplate.openWindow()
+

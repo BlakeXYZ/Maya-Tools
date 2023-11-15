@@ -43,42 +43,84 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 				# Set initial Window Size
         self.adjustSize()
 
-
         ###
         ###
         # find interactive elements of UI
 
-
         self.pushButton = self.mainWidget.findChild(QtWidgets.QPushButton, 'pushButton')
-
         self.btn_closeWindow = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
-
-
-        
-        
+     
         ###
         ###
         # assign clicked handler to buttons
 
-        self.pushButton.clicked.connect(self.cubeOfSpheres)
+        self.pushButton.clicked.connect(self.print_to_output_log)
         self.btn_closeWindow.clicked.connect(self.closeWindow)
 
+        ###
+        ###
+        # OUTPUT LOG 
 
+        self.widget_toggle_output_log = self.mainWidget.findChild(QtWidgets.QWidget, 'widget_toggle_output_log')
+        self.label_toggle_output_log = self.mainWidget.findChild(QtWidgets.QLabel, 'label_toggle_output_log')
+        self.label_toggle_output_log_text = self.mainWidget.findChild(QtWidgets.QLabel, 'label_toggle_output_log_text')
+        self.textEdit_output_log = self.mainWidget.findChild(QtWidgets.QTextEdit, 'textEdit_output_log')
+
+        self.label_toggle_output_log_text.setStyleSheet("font-weight: bold;")
+        self.label_toggle_output_log.setPixmap(QtGui.QPixmap(f':/teDownArrow.png').scaledToHeight(12))
+
+        self.widget_toggle_output_log.installEventFilter(self)   # Install an event filter on the child widget
+
+
+
+    """
+    Code goes here
+    """
     
     """
-    Your code goes here
+    OUTPUT LOG FUNCTIONS
     """
 
-    def cubeOfSpheres(self):
+    def print_to_output_log(self):
 
-        for i in range (0,5):
-            for j in range (0,5):
-                for k in range (0,5):
+        current_consoleLog =  self.textEdit_output_log.toHtml()
+        self.textEdit_output_log.setHtml(f'{current_consoleLog} hello')
 
-                    cmds.sphere(r=0.5)
-                    cmds.move(i, j*2, k, r=True) 
+        self.UTILITY_move_consoleLog_cursor_to_end()
+
+    def UTILITY_move_consoleLog_cursor_to_end(self):
+        cursor = self.textEdit_output_log.textCursor()
+        cursor.movePosition(cursor.End)
+        self.textEdit_output_log.setTextCursor(cursor)
+        self.textEdit_output_log.ensureCursorVisible()   
+
+    def toggle_output_log(self):
+            
+        icon_collapsed = QtGui.QPixmap(f':/teRightArrow.png').scaledToHeight(12)
+        icon_expanded = QtGui.QPixmap(f':/teDownArrow.png').scaledToHeight(12)
+
+        current_visibility = self.textEdit_output_log.isVisible()
+        self.textEdit_output_log.setVisible(not current_visibility)
+
+        if current_visibility:
+            self.label_toggle_output_log.setPixmap(icon_collapsed)
+        else:
+            self.label_toggle_output_log.setPixmap(icon_expanded)
 
 
+    def eventFilter(self, obj, event):
+
+        # if child widget_toggle_output_log widget clicked
+        if obj == self.widget_toggle_output_log and event.type() == QtCore.QEvent.Type.MouseButtonRelease:
+            self.toggle_output_log()
+
+            return True  # Event handled
+        return super().eventFilter(obj, event) 
+    
+
+    """
+    BASE FUNCTIONS
+    """
             
     def resizeEvent(self, event):
         """
