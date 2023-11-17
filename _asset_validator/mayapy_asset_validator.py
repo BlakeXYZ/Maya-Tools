@@ -50,25 +50,18 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 				# Set initial Window Size
         self.adjustSize()
 
-        ###
+        ####
         # find interactive elements of UI
-
-        self.label_loaded_asset_name = self.mainWidget.findChild(QtWidgets.QLabel, 'label_loaded_asset_name')
-        self.label_validate_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_single_asset_in_scene')
-
+        self.btn_validate = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_validate')
         self.btn_closeWindow = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
-        self.btn_print_to_output_log = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_print_to_output_log')
-
-        self.label_validate_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_single_asset_in_scene')
         
-        ###
+        ####
         # assign clicked handler to buttons
+        self.btn_validate.clicked.connect(self.run_through_validations)
         self.btn_closeWindow.clicked.connect(self.closeWindow)
-        self.btn_print_to_output_log.clicked.connect(self.print_to_output_log)
 
-        ###
+        ####
         # OUTPUT LOG 
-
         self.widget_toggle_output_log = self.mainWidget.findChild(QtWidgets.QWidget, 'widget_toggle_output_log')
         self.label_toggle_output_log = self.mainWidget.findChild(QtWidgets.QLabel, 'label_toggle_output_log')
         self.label_toggle_output_log_text = self.mainWidget.findChild(QtWidgets.QLabel, 'label_toggle_output_log_text')
@@ -79,29 +72,36 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
         self.widget_toggle_output_log.installEventFilter(self)   # Install an event filter on the child widget
 
-        ### 
+        ####
         # VALIDATION calls
-        self.label_loaded_asset_name.setText(self.get_asset_name())
+        self.label_loaded_asset_name = self.mainWidget.findChild(QtWidgets.QLabel, 'label_loaded_asset_name')
+        self.label_validate_is_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_is_single_asset_in_scene')
+        self.label_is_transform_frozen = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_transform_frozen')
+
+        self.run_through_validations()
 
 
-        self.validate_is_single_asset_in_scene()
 
     """
     Playground Code
     """
-    def print_to_output_log(self):
-
-        current_consoleLog =  self.textEdit_output_log.toHtml()
-        self.textEdit_output_log.setHtml(f'{current_consoleLog} hello')
-
-        self.move_output_log_cursor_to_end()
-
-        mayapy_asset_validator_utils.test_function()
-
+####
+#####
+####
 
     """
     Your code goes here
     """
+
+    def run_through_validations(self):
+        self.label_loaded_asset_name.setText(self.get_asset_name())
+
+        # Build new Validation Instance based on get_asset_name function (grabs asset[0] in Maya Outliner)
+        Validate = mayapy_asset_validator_utils.ValidationUtils(self.get_asset_name())
+
+        Validate.is_single_asset_in_scene(self.label_validate_is_single_asset_in_scene)
+        Validate.is_transform_frozen(self.label_is_transform_frozen)
+
 
     def get_asset_name(self):
 
