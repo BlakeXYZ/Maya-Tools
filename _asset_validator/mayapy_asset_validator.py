@@ -58,6 +58,8 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
         self.btn_closeWindow = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
         self.btn_print_to_output_log = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_print_to_output_log')
+
+        self.label_validate_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_single_asset_in_scene')
         
         ###
         # assign clicked handler to buttons
@@ -80,7 +82,9 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         ### 
         # VALIDATION calls
         self.label_loaded_asset_name.setText(self.get_asset_name())
-        self.validate_single_asset_in_scene()
+
+
+        self.validate_is_single_asset_in_scene()
 
     """
     Playground Code
@@ -90,10 +94,9 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         current_consoleLog =  self.textEdit_output_log.toHtml()
         self.textEdit_output_log.setHtml(f'{current_consoleLog} hello')
 
-        self.UTILITY_move_output_log_cursor_to_end()
+        self.move_output_log_cursor_to_end()
 
         mayapy_asset_validator_utils.test_function()
-
 
 
     """
@@ -111,71 +114,38 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         asset_name = transform_info
 
         return asset_name
-    
-
-
  
+
 #TODO: Setup UTILS.py and call in VALIDATIONs from there, help with code management
-       
-################
-##                                                                                                        Validation - Missing Asset in Scene and/or too many assets in scene
 
-    def validate_single_asset_in_scene(self):
-        # IF VALIDATION passes, allow to continue with rest of Tool Use
-
-        self.single_asset_in_scene = False
-
-        # List all geometry
-        list_geo = cmds.ls(geometry=True)
-
-        # check if single asset is inside scene VALIDATION FUNCTION
-
-        if len(list_geo) == 1:
-            self.single_asset_in_scene = True
-        elif len(list_geo) > 1:
-            self.single_asset_in_scene = False
-        else:
-            self.single_asset_in_scene = False
-
-        self.validation_StyleSheet('label_validate_single_asset_in_scene', self.single_asset_in_scene)
 
 #TODO: VALIDATE Button, (refreshes asset) 
-
-    def validation_StyleSheet(self, ui_name, validation_check):
-
-        ui_widget = getattr(self, ui_name)
-
-        icon_confirm = QtGui.QPixmap(f':/confirm.png').scaledToHeight(32)
-        icon_error = QtGui.QPixmap(f':/error.png').scaledToHeight(32)
-
-
-        if validation_check == True:
-            ui_widget.setPixmap(icon_confirm)
-        elif validation_check == False:
-            ui_widget.setPixmap(icon_error)
-        else:
-            ui_widget.setStyleSheet('background-color: black')
-
 
     """
     OUTPUT LOG FUNCTIONS
     """
 
+    # GUI Press to toggle output log visibility
     def toggle_output_log(self):
-            
+        
+        # Collapse Arrow GUI icons
         icon_collapsed = QtGui.QPixmap(f':/teRightArrow.png').scaledToHeight(12)
         icon_expanded = QtGui.QPixmap(f':/teDownArrow.png').scaledToHeight(12)
 
+        # get isVisible bool and set to current visibility
         current_visibility = self.textEdit_output_log.isVisible()
+
+        # set isVisible to opposite of current bool value
         self.textEdit_output_log.setVisible(not current_visibility)
 
+        # set GUI icon based on bool value
         if current_visibility:
             self.label_toggle_output_log.setPixmap(icon_collapsed)
         else:
             self.label_toggle_output_log.setPixmap(icon_expanded)
 
-
-    def UTILITY_move_output_log_cursor_to_end(self):
+    # Handle QT textEdit panel view to always sit at latest log print
+    def move_output_log_cursor_to_end(self):
         cursor = self.textEdit_output_log.textCursor()
         cursor.movePosition(cursor.End)
         self.textEdit_output_log.setTextCursor(cursor)

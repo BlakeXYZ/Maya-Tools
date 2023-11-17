@@ -1,6 +1,9 @@
+import os
+
 import maya.cmds as cmds
 import maya.mel as mel
-import os
+from PySide2 import QtUiTools, QtCore, QtGui, QtWidgets
+
 
 
 
@@ -54,6 +57,73 @@ def is_asset_in_scene(list_geo): # check if single asset is inside scene VALIDAT
 
 
 
+class ValidationUtils:
+
+    def __init__(self, asset_name): #constructor
+        # pass in current asset in scene to instance of validation asset 
+        self.asset_name = asset_name
+
+    ####
+    # Is called inside each Validation Function: Sets GUI Label
+    @staticmethod
+    def validation_label_toggle(ui_label_object, validation_check):
+
+        # Valid Label GUI icons
+        icon_confirm = QtGui.QPixmap(f':/confirm.png').scaledToHeight(32)
+        icon_error = QtGui.QPixmap(f':/error.png').scaledToHeight(32)
+
+        # Toggle Label based on arg: validation_check bool value
+        if validation_check == True:
+            ui_label_object.setPixmap(icon_confirm)
+        elif validation_check == False:
+            ui_label_object.setPixmap(icon_error)
+        else:
+            ui_label_object.setStyleSheet('background-color: black')
+    ####
+    
+
+    ####
+    @staticmethod #decorator, belongs to class rather than instance
+    def is_single_asset_in_scene(ui_label_object):
+        # IF VALIDATION passes, allow to continue with rest of Tool Use
+        # Init Bool check to False
+        single_asset_in_scene = False
+
+        # List all geometry
+        list_geo = cmds.ls(geometry=True)
+
+        # check if single asset is inside scene VALIDATION FUNCTION - conditional expressions yay
+        single_asset_in_scene = False if len(list_geo) != 1 else True
+
+        # Set GUI Label for Validation Func
+        ValidationUtils.validation_label_toggle(ui_label_object, single_asset_in_scene)
+    ####
+
+
+    ####
+    # Freeze Transforms VALIDATION FUNCTION
+    def is_transform_frozen(self): 
+
+        # Save the original transform values
+        translate_value = cmds.getAttr(self.asset_name + '.translate')[0]
+        rotate_value = cmds.getAttr(self.asset_name + '.rotate')[0]
+        scale_value = cmds.getAttr(self.asset_name + '.scale')[0]
+
+        # Check if all transforms are zeroed out
+        if all(value == 0 for value in translate_value) and all(value == 0 for value in rotate_value) and all(value == 1 for value in scale_value):
+            return True
+        else:
+            return False
+        
+    # Freeze transforms for the specified object
+    def freeze_transform(self):
+        cmds.makeIdentity(self.asset_name, apply=True, translate=True, rotate=True, scale=True)
+    ####
+
+
+
+
+
 
 # #################
 # ##                                                                                                        Validate - Correct File/Asset Name
@@ -61,21 +131,20 @@ def is_asset_in_scene(list_geo): # check if single asset is inside scene VALIDAT
 # ## All need to MATCH:       Folder Name         > File Name              > Asset Name
 # ##                          CharacterABC_Skin01 > CharacterABC_Skin01.ma > CharacterABC_Skin01.fbx
 
-# # Get the current scene name
-# file_path = cmds.file(q=True, sceneName=True)
-# if not file_path:
-#     file_path = 'Unsaved Maya Scene!'
+# def validate_is_asset_name_valid():
+#     # Get the current scene name
+#     file_path = cmds.file(q=True, sceneName=True)
+#     if not file_path:
+#         file_path = 'Unsaved Maya Scene!'
 
-# print(f'File Path: {file_path}')
+#     folder_name = file_path.rsplit('/', 2)[-2]
+#     file_name_w_extension = file_path.rsplit('/', 2)[-1]
+#     file_name, file_extension = os.path.splitext(file_name_w_extension)
 
-# folder_name = file_path.rsplit('/', 2)[-2]
-# file_name_w_extension = file_path.rsplit('/', 2)[-1]
-# file_name, file_extension = os.path.splitext(file_name_w_extension)
-
-# print(f'Folder Name: {folder_name}')
-# print(f'File Name w Extension: {file_name_w_extension}')
-# print(f'File Name: {file_name} -- File Extension: {file_extension}')
-# print(f'Asset Name: {asset_name}')
+#     print(f'Folder Name: {folder_name}')
+#     print(f'File Name w Extension: {file_name_w_extension}')
+#     print(f'File Name: {file_name} -- File Extension: {file_extension}')
+#     print(f'Asset Name: {asset_name}')
 
 
 # #################
