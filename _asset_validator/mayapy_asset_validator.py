@@ -52,12 +52,20 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
         ####
         # find interactive elements of UI
+        self.btn_freeze_transforms = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_freeze_transforms')
+        self.btn_reset_pivot = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_reset_pivot')
+
         self.btn_validate = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_validate')
+
         self.btn_closeWindow = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
         
         ####
         # assign clicked handler to buttons
-        self.btn_validate.clicked.connect(self.run_through_validations)
+        self.btn_freeze_transforms.clicked.connect(self.freeze_transforms)
+        self.btn_reset_pivot.clicked.connect(self.reset_pivot)
+
+        self.btn_validate.clicked.connect(self.run_through_all_validations)
+
         self.btn_closeWindow.clicked.connect(self.closeWindow)
 
         ####
@@ -73,38 +81,92 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.widget_toggle_output_log.installEventFilter(self)   # Install an event filter on the child widget
 
         ####
-        # VALIDATION calls
+        # VALIDATION LABELS
         self.label_loaded_asset_name = self.mainWidget.findChild(QtWidgets.QLabel, 'label_loaded_asset_name')
         self.label_validate_is_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_is_single_asset_in_scene')
         self.label_is_transform_frozen = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_transform_frozen')
+        self.label_is_pivot_worldspace_zero = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_pivot_worldspace_zero')
 
-        self.run_through_validations()
+
+        self.run_through_all_validations()
 
 
 
     """
     Playground Code
     """
+
+
 ####
 #####
 ####
 
+
     """
-    Your code goes here
+    BTN PRESS FUNCTIONS
     """
 
-    def run_through_validations(self):
+    # On BTN press, Run through all validations inside ValidationUtils Class -- self.btn_validate.clicked.connect(self.run_through_all_validations)
+    def run_through_all_validations(self):
+        current_consoleLog =  self.textEdit_output_log.toHtml()
+        self.textEdit_output_log.setHtml(f'{current_consoleLog} ------------')
+
         self.label_loaded_asset_name.setText(self.get_asset_name())
 
         # Build new Validation Instance based on get_asset_name function (grabs asset[0] in Maya Outliner)
-        Validate = mayapy_asset_validator_utils.ValidationUtils(self.get_asset_name())
+        Validate = mayapy_asset_validator_utils.ValidationUtils(self.get_asset_name(), self.textEdit_output_log)
 
         Validate.is_single_asset_in_scene(self.label_validate_is_single_asset_in_scene)
-        Validate.is_transform_frozen(self.label_is_transform_frozen)
+        Validate.is_transforms_frozen(self.label_is_transform_frozen)
+        Validate.is_pivot_worldspace_zero(self.label_is_pivot_worldspace_zero)
 
+
+    # On BTN press, Freeze transforms for the specified object -- self.btn_freeze_transforms.clicked.connect(self.freeze_transforms)
+    def freeze_transforms(self):
+        current_consoleLog =  self.textEdit_output_log.toHtml()
+        self.textEdit_output_log.setHtml(f'{current_consoleLog} ------------')
+
+        cmds.makeIdentity(self.get_asset_name(), apply=True, translate=True, rotate=True, scale=True)
+        # Build new Validation Instance based on get_asset_name function (grabs asset[0] in Maya Outliner)
+        Validate = mayapy_asset_validator_utils.ValidationUtils(self.get_asset_name(), self.textEdit_output_log)
+        Validate.is_transforms_frozen(self.label_is_transform_frozen)
+
+    # On BTN press, reset pivot -- self.btn_reset_pivot.clicked.connect(self.reset_pivot)
+    def reset_pivot(self):
+        current_consoleLog =  self.textEdit_output_log.toHtml()
+        self.textEdit_output_log.setHtml(f'{current_consoleLog} ------------')
+
+        ####
+        # Store the original location
+        original_location = cmds.xform(self.get_asset_name(), query=True, rotatePivot=True, worldSpace=True)
+
+        # Move the object with the relative pivot point set to the origin
+        cmds.move(0, 0, 0, self.get_asset_name(), rotatePivotRelative=True)
+
+        # Freeze transforms for the specified object
+        cmds.makeIdentity(self.get_asset_name(), apply=True, translate=True, rotate=True, scale=True)
+
+        print("Object moved back to the centered origin.")
+
+        # Query the new location
+        new_location = cmds.xform(self.get_asset_name(), query=True, rotatePivot=True, worldSpace=True)
+
+        # Print the original and new locations
+        print('Original Location:', original_location)
+        print('New Location:', new_location)
+        #
+        ####
+        # Build new Validation Instance based on get_asset_name function (grabs asset[0] in Maya Outliner)
+        Validate = mayapy_asset_validator_utils.ValidationUtils(self.get_asset_name(), self.textEdit_output_log)
+        Validate.is_pivot_worldspace_zero(self.label_is_pivot_worldspace_zero)
+
+
+    """
+    HELPER FUNCTIONS
+    Called inside self.btn_*.clicked.connect
+    """
 
     def get_asset_name(self):
-
         # List all geometry
         list_geo = cmds.ls(geometry=True)
         mesh_info = list_geo[0]
@@ -114,12 +176,7 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         asset_name = transform_info
 
         return asset_name
- 
-
-#TODO: Setup UTILS.py and call in VALIDATIONs from there, help with code management
-
-
-#TODO: VALIDATE Button, (refreshes asset) 
+    
 
     """
     OUTPUT LOG FUNCTIONS
@@ -143,13 +200,6 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
             self.label_toggle_output_log.setPixmap(icon_collapsed)
         else:
             self.label_toggle_output_log.setPixmap(icon_expanded)
-
-    # Handle QT textEdit panel view to always sit at latest log print
-    def move_output_log_cursor_to_end(self):
-        cursor = self.textEdit_output_log.textCursor()
-        cursor.movePosition(cursor.End)
-        self.textEdit_output_log.setTextCursor(cursor)
-        self.textEdit_output_log.ensureCursorVisible()    
 
 
     def eventFilter(self, obj, event):
