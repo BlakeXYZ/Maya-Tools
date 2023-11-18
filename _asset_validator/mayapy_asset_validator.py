@@ -90,26 +90,12 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.label_validate_is_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_is_single_asset_in_scene')
         self.label_is_asset_name_valid = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_asset_name_valid')
         self.label_is_file_name_valid = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_file_name_valid')
-
+        #-----
         self.label_is_transform_frozen = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_transform_frozen')
         self.label_is_pivot_worldspace_zero = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_pivot_worldspace_zero')
         self.label_is_construction_history_deleted = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_construction_history_deleted')
 
-
         self.run_through_all_validations()
-
-
-
-
-
-    """
-    Playground Code
-    """
-
-
-####
-#####
-####
 
 
     """
@@ -133,7 +119,7 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         bool_single_asset_in_scene = Validate.is_single_asset_in_scene(self.label_validate_is_single_asset_in_scene)
         bool_asset_name_is_valid = Validate.is_asset_name_valid(self.label_is_asset_name_valid)
         bool_file_name_is_valid = Validate.is_file_name_valid(self.label_is_file_name_valid)
-
+        #-----
         bool_transform_is_frozen = Validate.is_transforms_frozen(self.label_is_transform_frozen)
         bool_pivot_is_worldspace_zero = Validate.is_pivot_worldspace_zero(self.label_is_pivot_worldspace_zero)
         bool_construction_history_deleted = Validate.is_construction_history_deleted(self.label_is_construction_history_deleted)
@@ -143,6 +129,7 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
             bool_single_asset_in_scene,
             bool_asset_name_is_valid,
             bool_file_name_is_valid,
+            #-----
             bool_transform_is_frozen,
             bool_pivot_is_worldspace_zero,
             bool_construction_history_deleted
@@ -155,8 +142,6 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
             self.textEdit_output_log.setHtml(f'{current_outputLog} {text_input}')
             Validate.move_output_log_cursor_to_end()
         
-
-
     # On BTN press, Freeze transforms for the specified object -- self.btn_freeze_transforms.clicked.connect(self.freeze_transforms)
     def freeze_transforms(self):
 
@@ -181,7 +166,6 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         # Delete construction history for the specified object
         cmds.delete(self.get_asset_name(), constructionHistory=True)
         self.run_through_all_validations()
-
 
     """
     HELPER FUNCTIONS

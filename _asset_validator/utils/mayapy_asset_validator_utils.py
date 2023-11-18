@@ -130,7 +130,8 @@ class ValidationUtils:
     ####
 
     ####
-    # VALIDATE Correct Folder/File/Asset Name
+    # VALIDATE Correct Asset Name + File Name
+    # compares against Folder Name
     def is_asset_name_valid(self, ui_label_object):
 
         ## All need to MATCH:       Folder Name         > File Name              > Asset Name
@@ -172,7 +173,7 @@ class ValidationUtils:
 
         return bool_file_name_is_valid
     
-    
+    # helper function running inside VALIDATE Correct Asset Name + File Name functions
     def get_folder_and_file_name(self):
 
         # Get the current scene name
