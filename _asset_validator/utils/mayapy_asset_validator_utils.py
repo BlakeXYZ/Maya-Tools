@@ -19,12 +19,6 @@ class ValidationUtils:
     Called inside each Validation Function
     """
 
-        # # Set Output Log Text
-        # if not single_asset_in_scene:
-        #     my_text_input = (f'is single asset in scene: {single_asset_in_scene}')
-        #     self.print_to_output_log(my_text_input)
-
-
 #TODO: Differentiate between ERROR WARNING and SUCCESS
 
     def print_to_output_log(self, bool_check, text_validation_name):
@@ -61,7 +55,6 @@ class ValidationUtils:
 
     """
     VALIDATION FUNCTIONS
-    Called inside each Validation Function
     """
 
     ####
@@ -73,7 +66,7 @@ class ValidationUtils:
         bool_single_asset_in_scene = False         # Init Bool check to False
 
         # List all geometry
-        list_geo = cmds.ls(geometry=True)
+        list_geo = cmds.ls(dag=True, long=True, type='transform', v=True) #dag=true flag limits the result to direct descendants of the DAG (Directed Acyclic Graph)
 
         # check if single asset is inside scene VALIDATION FUNCTION - conditional expressions yay
         bool_single_asset_in_scene = False if len(list_geo) != 1 else True
@@ -84,8 +77,6 @@ class ValidationUtils:
         self.print_to_output_log(bool_single_asset_in_scene, text_validation_name)
 
         return bool_single_asset_in_scene
-
- 
     ####
 
     ####
@@ -112,7 +103,6 @@ class ValidationUtils:
         self.print_to_output_log(bool_transform_is_frozen, text_validation_name)
 
         return bool_transform_is_frozen
-
     ####
 
     ####
@@ -137,7 +127,6 @@ class ValidationUtils:
         self.print_to_output_log(bool_pivot_is_worldspace_zero, text_validation_name)
 
         return bool_pivot_is_worldspace_zero
-
     ####
 
     ####
@@ -149,18 +138,10 @@ class ValidationUtils:
         text_validation_name = 'is_asset_name_valid'
         bool_asset_name_is_valid = False
 
-        # Get the current scene name
-        file_path = cmds.file(q=True, sceneName=True)
-        if not file_path:
-            file_path = 'Unsaved Maya Scene!'
-
-        # find and store folder, file and asset names to compare
-        folder_name = file_path.rsplit('/', 2)[-2]
-        file_name_w_extension = file_path.rsplit('/', 2)[-1]
-        file_name, file_extension = os.path.splitext(file_name_w_extension)
+        folder_name, file_name = self.get_folder_and_file_name()
 
         # compare stored variables
-        if folder_name == file_name == self.asset_name:
+        if self.asset_name == folder_name:
             bool_asset_name_is_valid = True
         else:
             bool_asset_name_is_valid = False
@@ -171,7 +152,66 @@ class ValidationUtils:
         self.print_to_output_log(bool_asset_name_is_valid, text_validation_name)
 
         return bool_asset_name_is_valid
+    
+    def is_file_name_valid(self, ui_label_object):
+        text_validation_name = 'is_file_name_valid'
+        bool_file_name_is_valid = False
+
+        folder_name, file_name = self.get_folder_and_file_name()
+
+        # compare stored variables
+        if file_name == folder_name:
+            bool_file_name_is_valid = True
+        else:
+            bool_file_name_is_valid = False
+
+        # Set GUI Label for Validation Func
+        self.validation_label_toggle(ui_label_object, bool_file_name_is_valid)
+        # Set Output Log Text
+        self.print_to_output_log(bool_file_name_is_valid, text_validation_name)
+
+        return bool_file_name_is_valid
+    
+    
+    def get_folder_and_file_name(self):
+
+        # Get the current scene name
+        file_path = cmds.file(q=True, sceneName=True)
+        if not file_path:
+            file_path = 'Unsaved Maya Scene!'
+
+        # find and store folder, file and asset names to compare
+        folder_name = file_path.rsplit('/', 2)[-2]
+        file_name_w_extension = file_path.rsplit('/', 2)[-1]
+        file_name, file_extension = os.path.splitext(file_name_w_extension)
+
+        return folder_name, file_name
+
     ####
+
+    ####
+    # VALIDATE Construction History Deleted
+    def is_construction_history_deleted(self, ui_label_object):
+
+        text_validation_name = 'is_construction_history_deleted'
+        bool_construction_history_deleted = False
+
+        my_history = cmds.listHistory(self.asset_name)
+
+    # Check if the object has a construction history
+        if len(my_history) == 1:
+            bool_construction_history_deleted = True
+        else:
+            bool_construction_history_deleted = False
+
+        # Set GUI Label for Validation Func
+        self.validation_label_toggle(ui_label_object, bool_construction_history_deleted)
+        # Set Output Log Text
+        self.print_to_output_log(bool_construction_history_deleted, text_validation_name)
+        
+        return bool_construction_history_deleted
+        
+
 
     """
     """
@@ -196,27 +236,6 @@ class ValidationUtils:
 #################
 
 
-
-
-
-
-# #################
-# ##                                                                                                        Validate - Construction History Deleted
-
-# def is_construction_history_deleted(asset_name): # construction history VALIDATION FUNCTION
-
-#     my_history = cmds.listHistory(asset_name)
-
-#    # Check if the object has a construction history
-#     if len(my_history) == 1:
-#         return True
-#     else:
-#         return False
-    
-# print(f'is_construction_history_deleted for {asset_name}: {is_construction_history_deleted(asset_name)}')
-
-# # Delete construction history for the specified object
-# cmds.delete(asset_name, constructionHistory=True)
 
 # #################
 # ##                                                                                                        Validation - Find Unused Materials

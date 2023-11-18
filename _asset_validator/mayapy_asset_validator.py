@@ -54,6 +54,7 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         # find interactive elements of UI
         self.btn_freeze_transforms = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_freeze_transforms')
         self.btn_reset_pivot = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_reset_pivot')
+        self.btn_delete_construction_history = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_delete_construction_history')
 
         self.btn_validate = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_validate')
 
@@ -63,6 +64,8 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         # assign clicked handler to buttons
         self.btn_freeze_transforms.clicked.connect(self.freeze_transforms)
         self.btn_reset_pivot.clicked.connect(self.reset_pivot)
+        self.btn_delete_construction_history.clicked.connect(self.delete_construction_history)
+
 
         self.btn_validate.clicked.connect(self.run_through_all_validations)
 
@@ -83,10 +86,15 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         ####
         # VALIDATION LABELS
         self.label_loaded_asset_name = self.mainWidget.findChild(QtWidgets.QLabel, 'label_loaded_asset_name')
+
         self.label_validate_is_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_is_single_asset_in_scene')
+        self.label_is_asset_name_valid = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_asset_name_valid')
+        self.label_is_file_name_valid = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_file_name_valid')
+
         self.label_is_transform_frozen = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_transform_frozen')
         self.label_is_pivot_worldspace_zero = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_pivot_worldspace_zero')
-        self.label_is_asset_name_valid = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_asset_name_valid')
+        self.label_is_construction_history_deleted = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_construction_history_deleted')
+
 
         self.run_through_all_validations()
 
@@ -123,16 +131,21 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
         # invoke methods and get return values to check if validaions have all passed
         bool_single_asset_in_scene = Validate.is_single_asset_in_scene(self.label_validate_is_single_asset_in_scene)
+        bool_asset_name_is_valid = Validate.is_asset_name_valid(self.label_is_asset_name_valid)
+        bool_file_name_is_valid = Validate.is_file_name_valid(self.label_is_file_name_valid)
+
         bool_transform_is_frozen = Validate.is_transforms_frozen(self.label_is_transform_frozen)
         bool_pivot_is_worldspace_zero = Validate.is_pivot_worldspace_zero(self.label_is_pivot_worldspace_zero)
-        bool_asset_name_is_valid = Validate.is_asset_name_valid(self.label_is_asset_name_valid)
+        bool_construction_history_deleted = Validate.is_construction_history_deleted(self.label_is_construction_history_deleted)
 
         # Check if all boolean values are True
         self.validations_all_passed = all([
             bool_single_asset_in_scene,
+            bool_asset_name_is_valid,
+            bool_file_name_is_valid,
             bool_transform_is_frozen,
             bool_pivot_is_worldspace_zero,
-            bool_asset_name_is_valid
+            bool_construction_history_deleted
         ])
 
         # If all validations have passed, print to output log
@@ -161,6 +174,12 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         # Freeze transforms for the specified object
         cmds.makeIdentity(self.get_asset_name(), apply=True, translate=True, rotate=True, scale=True)
         ####
+        self.run_through_all_validations()
+
+    def delete_construction_history(self):
+
+        # Delete construction history for the specified object
+        cmds.delete(self.get_asset_name(), constructionHistory=True)
         self.run_through_all_validations()
 
 

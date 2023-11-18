@@ -1,6 +1,6 @@
 //Maya ASCII 2024 scene
-//Name: asset_validation_test_01.ma
-//Last modified: Sat, Nov 18, 2023 12:50:18 AM
+//Name: asset_validation_test_0.ma
+//Last modified: Sat, Nov 18, 2023 12:49:52 AM
 //Codeset: 1252
 requires maya "2024";
 currentUnit -l centimeter -a degree -t film;
@@ -9,7 +9,7 @@ fileInfo "product" "Maya 2024";
 fileInfo "version" "2024";
 fileInfo "cutIdentifier" "202304191415-7fa20164c6";
 fileInfo "osv" "Windows 10 Home v2009 (Build: 19045)";
-fileInfo "UUID" "A595EB70-44E8-F716-23D5-0AA9BF2F794D";
+fileInfo "UUID" "FBE0E813-4E68-52F7-6FF1-728F8DA9434E";
 createNode transform -s -n "persp";
 	rename -uid "54857DFA-4077-49A6-F46A-56A088AB4E18";
 	setAttr ".v" no;
@@ -71,10 +71,10 @@ createNode camera -s -n "sideShape" -p "side";
 	setAttr ".man" -type "string" "side_mask";
 	setAttr ".hc" -type "string" "viewSet -s %camera";
 	setAttr ".o" yes;
-createNode transform -n "asset_validation_test_01";
+createNode transform -n "asset_validation_test_0";
 	rename -uid "FCD6D57C-40DE-0767-F0AC-1EA746C6D694";
 	setAttr ".sp" -type "double3" 8.4578277666968692e-16 0 1.5620803806376168e-15 ;
-createNode mesh -n "asset_validation_test_01Shape" -p "asset_validation_test_01";
+createNode mesh -n "asset_validation_test_0Shape" -p "asset_validation_test_0";
 	rename -uid "D506BB10-4276-9717-9B66-8D8265AD23F1";
 	setAttr -k off ".v";
 	setAttr ".vir" yes;
@@ -263,5 +263,5 @@ connectAttr "renderLayerManager.rlmi[0]" "defaultRenderLayer.rlid";
 connectAttr ":lambert1.msg" "hyperShadePrimaryNodeEditorSavedTabsInfo.tgi[0].ni[0].dn"
 		;
 connectAttr "defaultRenderLayer.msg" ":defaultRenderingList1.r" -na;
-connectAttr "asset_validation_test_01Shape.iog" ":initialShadingGroup.dsm" -na;
-// End of asset_validation_test_01.ma
+connectAttr "asset_validation_test_0Shape.iog" ":initialShadingGroup.dsm" -na;
+// End of asset_validation_test_0.ma
