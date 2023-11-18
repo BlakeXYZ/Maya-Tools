@@ -18,8 +18,11 @@ class ValidationUtils:
     HELPER FUNCTIONS
     Called inside each Validation Function
     """
-
+#####
 #TODO: Differentiate between ERROR WARNING and SUCCESS
+#
+#      Print to Maya Output Log and provide more context to Failed Validations
+#####
 
     def print_to_output_log(self, bool_check, text_validation_name):
 
@@ -131,7 +134,7 @@ class ValidationUtils:
 
     ####
     # VALIDATE Correct Asset Name + File Name
-    # compares against Folder Name
+    # compares against Folder Name using helper function: def get_folder_and_file_name()
     def is_asset_name_valid(self, ui_label_object):
 
         ## All need to MATCH:       Folder Name         > File Name              > Asset Name
@@ -154,7 +157,9 @@ class ValidationUtils:
 
         return bool_asset_name_is_valid
     
+    # Validates correct file name, compares against folder_name
     def is_file_name_valid(self, ui_label_object):
+
         text_validation_name = 'is_file_name_valid'
         bool_file_name_is_valid = False
 
@@ -187,7 +192,6 @@ class ValidationUtils:
         file_name, file_extension = os.path.splitext(file_name_w_extension)
 
         return folder_name, file_name
-
     ####
 
     ####
@@ -199,7 +203,7 @@ class ValidationUtils:
 
         my_history = cmds.listHistory(self.asset_name)
 
-    # Check if the object has a construction history
+        # Check if the object has a construction history
         if len(my_history) == 1:
             bool_construction_history_deleted = True
         else:
@@ -211,6 +215,7 @@ class ValidationUtils:
         self.print_to_output_log(bool_construction_history_deleted, text_validation_name)
         
         return bool_construction_history_deleted
+    ####
         
 
 

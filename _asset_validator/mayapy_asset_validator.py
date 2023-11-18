@@ -66,7 +66,6 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.btn_reset_pivot.clicked.connect(self.reset_pivot)
         self.btn_delete_construction_history.clicked.connect(self.delete_construction_history)
 
-
         self.btn_validate.clicked.connect(self.run_through_all_validations)
 
         self.btn_closeWindow.clicked.connect(self.closeWindow)
