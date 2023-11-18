@@ -86,9 +86,11 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.label_validate_is_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_is_single_asset_in_scene')
         self.label_is_transform_frozen = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_transform_frozen')
         self.label_is_pivot_worldspace_zero = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_pivot_worldspace_zero')
-
+        self.label_is_asset_name_valid = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_asset_name_valid')
 
         self.run_through_all_validations()
+
+
 
 
 
@@ -108,57 +110,58 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
     # On BTN press, Run through all validations inside ValidationUtils Class -- self.btn_validate.clicked.connect(self.run_through_all_validations)
     def run_through_all_validations(self):
-        current_consoleLog =  self.textEdit_output_log.toHtml()
-        self.textEdit_output_log.setHtml(f'{current_consoleLog} ------------')
+        current_outputLog =  self.textEdit_output_log.toHtml()
+        self.textEdit_output_log.setHtml(f'{current_outputLog} ------------')
 
         self.label_loaded_asset_name.setText(self.get_asset_name())
+
+        # If all Validation Checks PASS, print
+        self.validations_all_passed = False
 
         # Build new Validation Instance based on get_asset_name function (grabs asset[0] in Maya Outliner)
         Validate = mayapy_asset_validator_utils.ValidationUtils(self.get_asset_name(), self.textEdit_output_log)
 
-        Validate.is_single_asset_in_scene(self.label_validate_is_single_asset_in_scene)
-        Validate.is_transforms_frozen(self.label_is_transform_frozen)
-        Validate.is_pivot_worldspace_zero(self.label_is_pivot_worldspace_zero)
+        # invoke methods and get return values to check if validaions have all passed
+        bool_single_asset_in_scene = Validate.is_single_asset_in_scene(self.label_validate_is_single_asset_in_scene)
+        bool_transform_is_frozen = Validate.is_transforms_frozen(self.label_is_transform_frozen)
+        bool_pivot_is_worldspace_zero = Validate.is_pivot_worldspace_zero(self.label_is_pivot_worldspace_zero)
+        bool_asset_name_is_valid = Validate.is_asset_name_valid(self.label_is_asset_name_valid)
+
+        # Check if all boolean values are True
+        self.validations_all_passed = all([
+            bool_single_asset_in_scene,
+            bool_transform_is_frozen,
+            bool_pivot_is_worldspace_zero,
+            bool_asset_name_is_valid
+        ])
+
+        # If all validations have passed, print to output log
+        if self.validations_all_passed:
+            text_input = 'ALL VALIDATIONS HAVE PASSED!'
+            current_outputLog =  self.textEdit_output_log.toHtml()
+            self.textEdit_output_log.setHtml(f'{current_outputLog} {text_input}')
+            Validate.move_output_log_cursor_to_end()
+        
 
 
     # On BTN press, Freeze transforms for the specified object -- self.btn_freeze_transforms.clicked.connect(self.freeze_transforms)
     def freeze_transforms(self):
-        current_consoleLog =  self.textEdit_output_log.toHtml()
-        self.textEdit_output_log.setHtml(f'{current_consoleLog} ------------')
 
         cmds.makeIdentity(self.get_asset_name(), apply=True, translate=True, rotate=True, scale=True)
-        # Build new Validation Instance based on get_asset_name function (grabs asset[0] in Maya Outliner)
-        Validate = mayapy_asset_validator_utils.ValidationUtils(self.get_asset_name(), self.textEdit_output_log)
-        Validate.is_transforms_frozen(self.label_is_transform_frozen)
+        self.run_through_all_validations()
 
     # On BTN press, reset pivot -- self.btn_reset_pivot.clicked.connect(self.reset_pivot)
     def reset_pivot(self):
-        current_consoleLog =  self.textEdit_output_log.toHtml()
-        self.textEdit_output_log.setHtml(f'{current_consoleLog} ------------')
 
         ####
         # Store the original location
         original_location = cmds.xform(self.get_asset_name(), query=True, rotatePivot=True, worldSpace=True)
-
         # Move the object with the relative pivot point set to the origin
         cmds.move(0, 0, 0, self.get_asset_name(), rotatePivotRelative=True)
-
         # Freeze transforms for the specified object
         cmds.makeIdentity(self.get_asset_name(), apply=True, translate=True, rotate=True, scale=True)
-
-        print("Object moved back to the centered origin.")
-
-        # Query the new location
-        new_location = cmds.xform(self.get_asset_name(), query=True, rotatePivot=True, worldSpace=True)
-
-        # Print the original and new locations
-        print('Original Location:', original_location)
-        print('New Location:', new_location)
-        #
         ####
-        # Build new Validation Instance based on get_asset_name function (grabs asset[0] in Maya Outliner)
-        Validate = mayapy_asset_validator_utils.ValidationUtils(self.get_asset_name(), self.textEdit_output_log)
-        Validate.is_pivot_worldspace_zero(self.label_is_pivot_worldspace_zero)
+        self.run_through_all_validations()
 
 
     """

@@ -11,21 +11,28 @@ class ValidationError(Exception):
 class ValidationUtils:
 
     def __init__(self, asset_name, textEdit_output_log): #constructor
-        # pass in current asset in scene to instance of validation asset 
-        self.asset_name = asset_name
-        self.textEdit_output_log = textEdit_output_log
+        self.asset_name = asset_name                        # pass in custom function self.get_asset_name() and it's retun value
+        self.textEdit_output_log = textEdit_output_log      # pass in self.mainWidget.findChild(QtWidgets.QTextEdit, 'textEdit_output_log') inside class of QtWidgets.QWidget
 
     """
     HELPER FUNCTIONS
     Called inside each Validation Function
     """
 
+        # # Set Output Log Text
+        # if not single_asset_in_scene:
+        #     my_text_input = (f'is single asset in scene: {single_asset_in_scene}')
+        #     self.print_to_output_log(my_text_input)
+
+
 #TODO: Differentiate between ERROR WARNING and SUCCESS
 
-    def print_to_output_log(self, text_input):
-        
-        current_consoleLog =  self.textEdit_output_log.toHtml()
-        self.textEdit_output_log.setHtml(f'{current_consoleLog} {text_input}')
+    def print_to_output_log(self, bool_check, text_validation_name):
+
+        if not bool_check:
+            text_input = (f'{text_validation_name}: {bool_check}')
+            current_outputLog =  self.textEdit_output_log.toHtml()
+            self.textEdit_output_log.setHtml(f'{current_outputLog} {text_input}')
 
         self.move_output_log_cursor_to_end()
 
@@ -61,27 +68,33 @@ class ValidationUtils:
     # VALIDATE one asset inside scene
     def is_single_asset_in_scene(self, ui_label_object):
         # IF VALIDATION passes, allow to continue with rest of Tool Use
-        # Init Bool check to False
-        single_asset_in_scene = False
+                
+        text_validation_name = 'is_single_asset_in_scene'
+        bool_single_asset_in_scene = False         # Init Bool check to False
 
         # List all geometry
         list_geo = cmds.ls(geometry=True)
 
         # check if single asset is inside scene VALIDATION FUNCTION - conditional expressions yay
-        single_asset_in_scene = False if len(list_geo) != 1 else True
+        bool_single_asset_in_scene = False if len(list_geo) != 1 else True
 
         # Set GUI Label for Validation Func
-        self.validation_label_toggle(ui_label_object, single_asset_in_scene)
+        self.validation_label_toggle(ui_label_object, bool_single_asset_in_scene)
         # Set Output Log Text
-        my_text_input = (f'is single asset in scene: {single_asset_in_scene}')
-        self.print_to_output_log(my_text_input)
+        self.print_to_output_log(bool_single_asset_in_scene, text_validation_name)
+
+        return bool_single_asset_in_scene
+
+ 
     ####
 
     ####
     # VALIDATE Freeze Transforms
     def is_transforms_frozen(self, ui_label_object): 
 
-        transform_is_frozen = False
+        text_validation_name = 'is_transforms_frozen'
+        bool_transform_is_frozen = False
+
         # Save the original transform values
         translate_value = cmds.getAttr(self.asset_name + '.translate')[0]
         rotate_value = cmds.getAttr(self.asset_name + '.rotate')[0]
@@ -89,36 +102,75 @@ class ValidationUtils:
 
         # Check if all transforms are zeroed out
         if all(value == 0 for value in translate_value) and all(value == 0 for value in rotate_value) and all(value == 1 for value in scale_value):
-            transform_is_frozen = True
+            bool_transform_is_frozen = True
         else:
-            transform_is_frozen = False
+            bool_transform_is_frozen = False
         
         # Set GUI Label for Validation Func
-        self.validation_label_toggle(ui_label_object, transform_is_frozen)
+        self.validation_label_toggle(ui_label_object, bool_transform_is_frozen)
         # Set Output Log Text
-        my_text_input = (f'is transforms frozen: {transform_is_frozen}')
-        self.print_to_output_log(my_text_input)
+        self.print_to_output_log(bool_transform_is_frozen, text_validation_name)
+
+        return bool_transform_is_frozen
+
     ####
 
     ####
     # VALIDATE Center PIVOT/ORIGIN and ASSET to 0,0,0 World Space
     def is_pivot_worldspace_zero(self, ui_label_object): 
 
-        pivot_is_worldspace_zero = False
+        text_validation_name = 'is_pivot_worldspace_zero'
+        bool_pivot_is_worldspace_zero = False
+
         # check pivot location
         pivot_location = cmds.xform(self.asset_name, query=True, rotatePivot=True, worldSpace=True)
 
         # Check if transforms are zeroed out
         if all(value == 0 for value in pivot_location):
-            pivot_is_worldspace_zero = True
+            bool_pivot_is_worldspace_zero = True
         else:
-            pivot_is_worldspace_zero = False
+            bool_pivot_is_worldspace_zero = False
 
         # Set GUI Label for Validation Func
-        self.validation_label_toggle(ui_label_object, pivot_is_worldspace_zero)
+        self.validation_label_toggle(ui_label_object, bool_pivot_is_worldspace_zero)
         # Set Output Log Text
-        my_text_input = (f'is pivot worldspace zero: {pivot_is_worldspace_zero}')
-        self.print_to_output_log(my_text_input)
+        self.print_to_output_log(bool_pivot_is_worldspace_zero, text_validation_name)
+
+        return bool_pivot_is_worldspace_zero
+
+    ####
+
+    ####
+    # VALIDATE Correct Folder/File/Asset Name
+    def is_asset_name_valid(self, ui_label_object):
+
+        ## All need to MATCH:       Folder Name         > File Name              > Asset Name
+        ##                          CharacterABC_Skin01 > CharacterABC_Skin01.ma > CharacterABC_Skin01.fbx
+        text_validation_name = 'is_asset_name_valid'
+        bool_asset_name_is_valid = False
+
+        # Get the current scene name
+        file_path = cmds.file(q=True, sceneName=True)
+        if not file_path:
+            file_path = 'Unsaved Maya Scene!'
+
+        # find and store folder, file and asset names to compare
+        folder_name = file_path.rsplit('/', 2)[-2]
+        file_name_w_extension = file_path.rsplit('/', 2)[-1]
+        file_name, file_extension = os.path.splitext(file_name_w_extension)
+
+        # compare stored variables
+        if folder_name == file_name == self.asset_name:
+            bool_asset_name_is_valid = True
+        else:
+            bool_asset_name_is_valid = False
+
+        # Set GUI Label for Validation Func
+        self.validation_label_toggle(ui_label_object, bool_asset_name_is_valid)
+        # Set Output Log Text
+        self.print_to_output_log(bool_asset_name_is_valid, text_validation_name)
+
+        return bool_asset_name_is_valid
     ####
 
     """
@@ -144,28 +196,6 @@ class ValidationUtils:
 #################
 
 
-
-
-# #################
-# ##                                                                                                        Validate - Correct File/Asset Name
-
-# ## All need to MATCH:       Folder Name         > File Name              > Asset Name
-# ##                          CharacterABC_Skin01 > CharacterABC_Skin01.ma > CharacterABC_Skin01.fbx
-
-# def validate_is_asset_name_valid():
-#     # Get the current scene name
-#     file_path = cmds.file(q=True, sceneName=True)
-#     if not file_path:
-#         file_path = 'Unsaved Maya Scene!'
-
-#     folder_name = file_path.rsplit('/', 2)[-2]
-#     file_name_w_extension = file_path.rsplit('/', 2)[-1]
-#     file_name, file_extension = os.path.splitext(file_name_w_extension)
-
-#     print(f'Folder Name: {folder_name}')
-#     print(f'File Name w Extension: {file_name_w_extension}')
-#     print(f'File Name: {file_name} -- File Extension: {file_extension}')
-#     print(f'Asset Name: {asset_name}')
 
 
 
