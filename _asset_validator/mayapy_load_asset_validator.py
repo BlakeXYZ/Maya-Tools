@@ -13,4 +13,4 @@ import importlib
 import mayapy_asset_validator
 
 importlib.reload(mayapy_asset_validator)
-mayapy_asset_validator.openWindow()
+mayapy_asset_validator.openWindow() 

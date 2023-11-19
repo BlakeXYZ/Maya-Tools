@@ -24,10 +24,13 @@ class ValidationUtils:
 #      Print to Maya Output Log and provide more context to Failed Validations
 #####
 
-    def print_to_output_log(self, bool_check, text_validation_name):
+    def print_to_output_log(self, bool_check, text_validation_name, text_validation_fail_reason=None):
 
+        if text_validation_fail_reason is None:
+            text_validation_fail_reason = ''
+            
         if not bool_check:
-            text_input = (f'{text_validation_name}: {bool_check}')
+            text_input = (f'{text_validation_name}: {bool_check} {text_validation_fail_reason}')
             current_outputLog =  self.textEdit_output_log.toHtml()
             self.textEdit_output_log.setHtml(f'{current_outputLog} {text_input}')
 
@@ -153,7 +156,8 @@ class ValidationUtils:
         # Set GUI Label for Validation Func
         self.validation_label_toggle(ui_label_object, bool_asset_name_is_valid)
         # Set Output Log Text
-        self.print_to_output_log(bool_asset_name_is_valid, text_validation_name)
+        text_validation_fail_reason = (f'-- asset_name: "{self.asset_name}" does not equal folder_name: "{folder_name}"')
+        self.print_to_output_log(bool_asset_name_is_valid, text_validation_name, text_validation_fail_reason)
 
         return bool_asset_name_is_valid
     
@@ -174,7 +178,8 @@ class ValidationUtils:
         # Set GUI Label for Validation Func
         self.validation_label_toggle(ui_label_object, bool_file_name_is_valid)
         # Set Output Log Text
-        self.print_to_output_log(bool_file_name_is_valid, text_validation_name)
+        text_validation_fail_reason = (f'-- file_name: "{file_name}" does not equal folder_name: "{folder_name}"')
+        self.print_to_output_log(bool_file_name_is_valid, text_validation_name, text_validation_fail_reason)
 
         return bool_file_name_is_valid
     
@@ -216,7 +221,94 @@ class ValidationUtils:
         
         return bool_construction_history_deleted
     ####
+
+    ####
+    # VALIDATE All Shading Groups Assigned
+    def are_shading_groups_all_assigned(self, ui_label_object): 
+
+        text_validation_name = 'are_shading_groups_all_assigned'
+        bool_shading_groups_all_assigned = False
+
+        print(f'self.is_any_shading_group_unused() - {self.is_any_shading_group_unused()}')
+
+        if self.is_any_shading_group_unused():
+            bool_shading_groups_all_assigned = False
+        else: 
+            bool_shading_groups_all_assigned = True
+
+        # Set GUI Label for Validation Func
+        self.validation_label_toggle(ui_label_object, bool_shading_groups_all_assigned)
+        # Set Output Log Text
+        self.print_to_output_log(bool_shading_groups_all_assigned, text_validation_name)
         
+        return bool_shading_groups_all_assigned
+    
+
+    def is_any_shading_group_unused(self):
+        # List all shading groups in the scene
+        shading_groups = cmds.ls(type='shadingEngine')
+
+        for shading_group in shading_groups:
+            
+            if not cmds.objExists(shading_group):
+                continue
+
+            if cmds.sets(shading_group, q=True, renderable=True):
+                if shading_group not in ["initialShadingGroup", "initialParticleSE", "defaultLightSet", "defaultObjectSet"]:
+                    # Connection to dag objects
+                    objs = cmds.sets(shading_group, q=True)
+
+                    # Connection to render layers
+                    layers = cmds.listConnections(shading_group, type="renderLayer") or []
+                    material_templates = cmds.listConnections(shading_group, type="materialTemplate") or []
+                    shapes = cmds.listConnections(shading_group, type="shape", p=True, d=True, s=False) or []
+
+                    if not objs and not layers and not material_templates and not shapes:
+                        # Empty shading group
+                        return True
+                    else:
+                        # Check to make sure at least one shader is connected to the group
+                        connected = False
+
+                        # Check Maya shader connections
+                        attributes = [".surfaceShader", ".volumeShader", ".displacementShader"]
+                        for attr in attributes:
+                            if cmds.listConnections(shading_group + attr):
+                                connected = True
+                                break
+
+                        # Check custom shader connections
+                        if not connected:
+                            custom_shaders_array = cmds.callbacks(executionHI="allConnectedShaders", hook="allConnectedShaders", sh=shading_group) or []
+                            for shader in custom_shaders_array:
+                                if shader:
+                                    connected = True
+                                    break
+
+                        if not connected:
+                            return True
+
+        # No unused shading group found
+        return False
+
+
+
+
+        ##### Detective work guide for exploring MEL Commands and how they work: https://groups.google.com/g/python_inside_maya/c/N1_wASF3SH4
+        ### // mel
+        ### whatIs hyperShadePanelMenuCommand
+        ### // path to a mel script
+
+        ### If you look through that mel script for the usage of "deleteUnusedNodes", it will bring you to a command like:
+        ### MLdeleteUnused
+
+        ### // mel
+        ### whatIs MLdeleteUnused
+        ### // path to another mel script
+
+        ### If you read that script, you will see that the process of finding unused nodes is multiple stages. It looks at shading groups, and connections, and texture nodes
+        ### Then converted mel function to py cmds
+        #####
 
 
     """
@@ -243,86 +335,6 @@ class ValidationUtils:
 
 
 
-# #################
-# ##                                                                                                        Validation - Find Unused Materials
-
-
-
-# def is_any_shading_group_unused(): 
-
-#     ##### Detective work guide for exploring MEL Commands and how they work: https://groups.google.com/g/python_inside_maya/c/N1_wASF3SH4
-#     ### // mel
-#     ### whatIs hyperShadePanelMenuCommand
-#     ### // path to a mel script
-
-#     ### If you look through that mel script for the usage of "deleteUnusedNodes", it will bring you to a command like:
-#     ### MLdeleteUnused
-
-#     ### // mel
-#     ### whatIs MLdeleteUnused
-#     ### // path to another mel script
-
-#     ### If you read that script, you will see that the process of finding unused nodes is multiple stages. It looks at shading groups, and connections, and texture nodes
-#     ### Then converted mel function to py cmds
-#     #####
-
-#     ## List all shading groups in the scene
-#     shading_groups = cmds.ls(type='shadingEngine')
-#     # print(f'shading_groups: {shading_groups}')
-
-#     for shading_group in shading_groups:
-
-#         if not cmds.objExists(shading_group):
-#             return False
-
-#         if cmds.sets(shading_group, q=True, renderable=True):
-#             if shading_group not in ["initialShadingGroup", "initialParticleSE", "defaultLightSet", "defaultObjectSet"]:
-#                 # connection to dag objects
-#                 objs = cmds.sets(shading_group, q=True)
-
-#                 # connection to render layers
-#                 layers = cmds.listConnections(shading_group, type="renderLayer") or []
-#                 material_templates = cmds.listConnections(shading_group, type="materialTemplate") or []
-#                 shapes = cmds.listConnections(shading_group, type="shape", p=1, d=1, s=0) or []
-
-#                 if not objs and not layers and not material_templates and not shapes:
-#                     # empty shading group
-#                     return True
-#                 else:
-#                     # check to make sure at least one shader is connected to the group
-#                     connected = False
-
-#                     # Check Maya shader connections
-#                     attributes = [".surfaceShader", ".volumeShader", ".displacementShader"]
-#                     for attr in attributes:
-#                         if cmds.listConnections(shading_group + attr):
-#                             connected = True
-#                             break
-
-#                     # Check custom shader connections
-#                     if not connected:
-#                         custom_shaders_array = cmds.callbacks(executionHI="allConnectedShaders", hook="allConnectedShaders", sh=shading_group) or []
-#                         for shader in custom_shaders_array:
-#                             if shader:
-#                                 connected = True
-#                                 break
-
-#                     if not connected:
-#                         return True
-
-#         return False
-
-
-# print(f'is_any_shading_group_unused: {is_any_shading_group_unused()}')
-
-# if is_any_shading_group_unused():
-#     print('Found unused Shading Groups...do something')
-#     # Delete Unused Nodes
-#     mel.eval('hyperShadePanelMenuCommand("hyperShadePanel1", "deleteUnusedNodes");')
-
-# else:
-#     print('No unused Shading Groups found... do something else')
-
 
 # #################
 # ##                                                                                                        Validation - Choose Asset Type (JSON storage)
@@ -332,5 +344,7 @@ class ValidationUtils:
 #   UE Import Material Attachment
 #   UE Import Initial Folder Hierarchy Setup
 #   UE Import LOD Tag
+
+
 
 

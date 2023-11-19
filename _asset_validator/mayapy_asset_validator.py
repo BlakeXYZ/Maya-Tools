@@ -55,6 +55,8 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.btn_freeze_transforms = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_freeze_transforms')
         self.btn_reset_pivot = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_reset_pivot')
         self.btn_delete_construction_history = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_delete_construction_history')
+        self.btn_delete_unused_shaders = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_delete_unused_shaders')
+
 
         self.btn_validate = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_validate')
 
@@ -65,6 +67,8 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.btn_freeze_transforms.clicked.connect(self.freeze_transforms)
         self.btn_reset_pivot.clicked.connect(self.reset_pivot)
         self.btn_delete_construction_history.clicked.connect(self.delete_construction_history)
+        self.btn_delete_unused_shaders.clicked.connect(self.delete_unused_shaders)
+
 
         self.btn_validate.clicked.connect(self.run_through_all_validations)
 
@@ -85,6 +89,8 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         ####
         # VALIDATION LABELS
         self.label_loaded_asset_name = self.mainWidget.findChild(QtWidgets.QLabel, 'label_loaded_asset_name')
+        self.lineEdit_loaded_asset_name = self.mainWidget.findChild(QtWidgets.QLineEdit, 'lineEdit_loaded_asset_name')
+
 
         self.label_validate_is_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_is_single_asset_in_scene')
         self.label_is_asset_name_valid = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_asset_name_valid')
@@ -93,6 +99,7 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         self.label_is_transform_frozen = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_transform_frozen')
         self.label_is_pivot_worldspace_zero = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_pivot_worldspace_zero')
         self.label_is_construction_history_deleted = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_construction_history_deleted')
+        self.label_are_shading_groups_all_assigned = self.mainWidget.findChild(QtWidgets.QLabel, 'label_are_shading_groups_all_assigned')
 
         self.run_through_all_validations()
 
@@ -106,7 +113,7 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         current_outputLog =  self.textEdit_output_log.toHtml()
         self.textEdit_output_log.setHtml(f'{current_outputLog} ------------')
 
-        self.label_loaded_asset_name.setText(self.get_asset_name())
+        self.lineEdit_loaded_asset_name.setText(self.get_asset_name())
 
         # If all Validation Checks PASS, print
         self.validations_all_passed = False
@@ -122,6 +129,8 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         bool_transform_is_frozen = Validate.is_transforms_frozen(self.label_is_transform_frozen)
         bool_pivot_is_worldspace_zero = Validate.is_pivot_worldspace_zero(self.label_is_pivot_worldspace_zero)
         bool_construction_history_deleted = Validate.is_construction_history_deleted(self.label_is_construction_history_deleted)
+        bool_shading_groups_all_assigned = Validate.are_shading_groups_all_assigned(self.label_are_shading_groups_all_assigned)
+
 
         # Check if all boolean values are True
         self.validations_all_passed = all([
@@ -131,7 +140,8 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
             #-----
             bool_transform_is_frozen,
             bool_pivot_is_worldspace_zero,
-            bool_construction_history_deleted
+            bool_construction_history_deleted,
+            bool_shading_groups_all_assigned
         ])
 
         # If all validations have passed, print to output log
@@ -164,6 +174,12 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
 
         # Delete construction history for the specified object
         cmds.delete(self.get_asset_name(), constructionHistory=True)
+        self.run_through_all_validations()
+
+    def delete_unused_shaders(self):
+
+        # Delete Unused Nodes
+        mel.eval('hyperShadePanelMenuCommand("hyperShadePanel1", "deleteUnusedNodes");')
         self.run_through_all_validations()
 
     """
