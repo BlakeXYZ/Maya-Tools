@@ -13,6 +13,9 @@ Automate Validations per Asset to enforce standards and ensure consistency among
 
 
 #### Pipeline Problem:
+- Having standardized assets is critical to running a clean, collobarative production. As a project evolves and the development team cycles with the absences of an automated validator, the risk of an asset library turning into an unorganized, inconsistent library grows. This Tool streamlines the asset validation process, saving time for artists by automating repetitive checks and enforcing consistent standards. 
+
+
 
 
 #### Built with:
