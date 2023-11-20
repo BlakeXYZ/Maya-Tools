@@ -156,7 +156,7 @@ class ValidationUtils:
         # Set GUI Label for Validation Func
         self.validation_label_toggle(ui_label_object, bool_asset_name_is_valid)
         # Set Output Log Text
-        text_validation_fail_reason = (f'-- asset_name: "{self.asset_name}" does not equal folder_name: "{folder_name}"')
+        text_validation_fail_reason = (f'-- asset_name: "{self.asset_name}" does not match folder_name: "{folder_name}"')
         self.print_to_output_log(bool_asset_name_is_valid, text_validation_name, text_validation_fail_reason)
 
         return bool_asset_name_is_valid
@@ -178,7 +178,7 @@ class ValidationUtils:
         # Set GUI Label for Validation Func
         self.validation_label_toggle(ui_label_object, bool_file_name_is_valid)
         # Set Output Log Text
-        text_validation_fail_reason = (f'-- file_name: "{file_name}" does not equal folder_name: "{folder_name}"')
+        text_validation_fail_reason = (f'-- file_name: "{file_name}" does not match folder_name: "{folder_name}"')
         self.print_to_output_log(bool_file_name_is_valid, text_validation_name, text_validation_fail_reason)
 
         return bool_file_name_is_valid
@@ -229,8 +229,6 @@ class ValidationUtils:
         text_validation_name = 'are_shading_groups_all_assigned'
         bool_shading_groups_all_assigned = False
 
-        print(f'self.is_any_shading_group_unused() - {self.is_any_shading_group_unused()}')
-
         if self.is_any_shading_group_unused():
             bool_shading_groups_all_assigned = False
         else: 
@@ -249,7 +247,7 @@ class ValidationUtils:
         shading_groups = cmds.ls(type='shadingEngine')
 
         for shading_group in shading_groups:
-            
+
             if not cmds.objExists(shading_group):
                 continue
 

@@ -21,7 +21,7 @@ importlib.reload(mayapy_asset_validator_utils)           # Reloads imported .py 
 class ValidationError(Exception):
     pass
 
-class my_Maya_QT_boilerplate(QtWidgets.QWidget):
+class AssetValidator(QtWidgets.QWidget):
     """
     Create a default tool window.
     """
@@ -31,7 +31,7 @@ class my_Maya_QT_boilerplate(QtWidgets.QWidget):
         """
         Initialize class.
         """
-        super(my_Maya_QT_boilerplate, self).__init__(parent = parent)
+        super(AssetValidator, self).__init__(parent = parent)
 
         # Set window flags to create a standalone window
         self.setWindowFlags(QtCore.Qt.Window)
@@ -264,10 +264,10 @@ def openWindow():
     #QtWidgets.QApplication(sys.argv)
     mayaMainWindowPtr = omui.MQtUtil.mainWindow()
     mayaMainWindow = wrapInstance(int(mayaMainWindowPtr), QtWidgets.QWidget)
-    my_Maya_QT_boilerplate.window = my_Maya_QT_boilerplate(parent = mayaMainWindow)
-    my_Maya_QT_boilerplate.window.setObjectName('myToolWindowName') # code above uses this to ID any existing windows
-    my_Maya_QT_boilerplate.window.setWindowTitle('My Maya QT boilerplatee')
-    my_Maya_QT_boilerplate.window.show()
+    AssetValidator.window = AssetValidator(parent = mayaMainWindow)
+    AssetValidator.window.setObjectName('myToolWindowName') # code above uses this to ID any existing windows
+    AssetValidator.window.setWindowTitle('Asset Validator')
+    AssetValidator.window.show()
     
 openWindow()
 
