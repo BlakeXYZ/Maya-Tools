@@ -20,7 +20,7 @@
 ---
  ### Helix Creator
 
-[GitHub Page](https://github.com/BlakeXYZ/Maya-Tools/tree/main/misc_scripts/_helix_creator/readme.md) - A Simple Tool to Create Helixes. Foundational knowledge thanks to [Isaac Oster](https://isaacoster.gumroad.com/l/oUpTB?layout=profile&recommended_by=library)
+[GitHub Page](https://github.com/BlakeXYZ/Maya-Tools/tree/main/misc_scripts/_helix_creator/readme.md) - A Simple Tool to Create Helixes. Foundational knowledge thanks to [Isaac Oster](https://isaacoster.gumroad.com/l/oUpTB?layout=profile&recommended_by=library).
 
 
 
