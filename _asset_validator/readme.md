@@ -1,4 +1,4 @@
-# Auto Material Instancer
+# Asset Validator
 
 ## <ins>Overview</ins>
 
@@ -22,14 +22,11 @@ ____________
 
 Describe how to use your tool. Include examples or code snippets to illustrate common use cases. Explain any command-line options, configuration settings, or parameters that users need to be aware of.
 
-<div align="center">Batch Automate moving of Assets into new Folders based on User selected Assets and User input Folder names.
+<div align="center">placeholder text.
 </div>
 <br>
 
-<p align="center">
-   
-<img src="https://github.com/BlakeXYZ/Unreal-Engine-Tools/assets/37947050/2f0ccaa9-be51-4b83-b4d6-8cdfcd959654" width="700">
-</p>
+
 ______
 ## <ins>Documentation</ins>
 
