@@ -1,0 +1,5 @@
+{
+	"asset_validator_DB" : {
+    		"asset_types": ["creature", "prop", "environment", "character"]
+	}
+}

@@ -6,13 +6,16 @@ Maya 2024
 """
 import sys
 import os 
+import inspect
 import importlib     
+import json 
 
 import maya.cmds as cmds
 import maya.mel as mel
 from maya import OpenMayaUI as omui
 from shiboken2 import wrapInstance
 from PySide2 import QtUiTools, QtCore, QtGui, QtWidgets
+from PySide2.QtCore import QUrl
 from functools import partial # optional, for passing args during signal function calls
 
 from utils import mayapy_asset_validator_utils
@@ -52,27 +55,33 @@ class AssetValidator(QtWidgets.QWidget):
 
         ####
         # find interactive elements of UI
+
+        self.comboBox_LIST_attr_asset_type = self.mainWidget.findChild(QtWidgets.QComboBox, 'comboBox_LIST_attr_asset_type')
+
         self.btn_freeze_transforms = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_freeze_transforms')
         self.btn_reset_pivot = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_reset_pivot')
         self.btn_delete_construction_history = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_delete_construction_history')
         self.btn_delete_unused_shaders = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_delete_unused_shaders')
 
-
         self.btn_validate = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_validate')
 
         self.btn_closeWindow = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
+        self.btn_help_url = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_help_url')
+
         
         ####
         # assign clicked handler to buttons
+        self.comboBox_LIST_attr_asset_type.activated.connect(self.UTILITY_validation_btns_state)
+
         self.btn_freeze_transforms.clicked.connect(self.freeze_transforms)
         self.btn_reset_pivot.clicked.connect(self.reset_pivot)
         self.btn_delete_construction_history.clicked.connect(self.delete_construction_history)
         self.btn_delete_unused_shaders.clicked.connect(self.delete_unused_shaders)
 
-
         self.btn_validate.clicked.connect(self.run_through_all_validations)
 
         self.btn_closeWindow.clicked.connect(self.closeWindow)
+        self.btn_help_url.clicked.connect(self.help_url)
 
         ####
         # OUTPUT LOG 
@@ -101,25 +110,94 @@ class AssetValidator(QtWidgets.QWidget):
         self.label_is_construction_history_deleted = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_construction_history_deleted')
         self.label_are_shading_groups_all_assigned = self.mainWidget.findChild(QtWidgets.QLabel, 'label_are_shading_groups_all_assigned')
 
-        self.run_through_all_validations()
 
+        ###
+        ###
+        # Initialize Global LISTS + DICTs + SWITCHes
+        self.LIST_validation_labels = [
+            self.label_validate_is_single_asset_in_scene,
+            self.label_is_asset_name_valid,
+            self.label_is_file_name_valid,
+            #-----
+            self.label_is_transform_frozen,
+            self.label_is_pivot_worldspace_zero,
+            self.label_is_construction_history_deleted,
+            self.label_are_shading_groups_all_assigned,
+        ]
+        self.LIST_validation_btns = [
+            self.btn_freeze_transforms,
+            self.btn_reset_pivot,
+            self.btn_delete_construction_history,
+            self.btn_delete_unused_shaders,
+            self.btn_validate
+        ]
+        self.SWITCH_validation_btns_isEnabled = False
+
+
+        ###
+        ###
+        # Init Logic Functions to Run
+        self.run_through_all_validations()
+        self.populate_comboBox_LIST_attr_asset_type()
+        self.UTILITY_validation_btns_state()
+
+
+
+    """
+    Init Combo Box Function
+    """
+    # Populate Asset Type using JSON DataTable 
+    def populate_comboBox_LIST_attr_asset_type(self):
+
+        ###
+        ###
+        # Finding Paths
+        # # Get the path of the current Python file
+        # current_file_path = os.path.abspath(__file__)
+        # print("current_file_path:", current_file_path)
+
+        # Get Parent Folder Path
+        script_directory_path = os.path.dirname(inspect.getfile(inspect.currentframe()))
+        # Get Child Folder Path with JSON File
+        asset_validator_DB_path = os.path.join(script_directory_path, 'data\mayapy_asset_validator_DB.json')
+        print("asset_validator_DB", asset_validator_DB_path)
+        #
+        ###
+        
+        # Load JSON DB and store asset_types DB list into py LIST
+        try:
+            with open(asset_validator_DB_path, "r") as json_file:
+                asset_validator_DB = json.load(json_file)
+        except Exception as e:
+            raise ValidationError(f'Error decoding JSON: {str(e)}')
+        self.LIST_attr_asset_type = sorted(asset_validator_DB["asset_validator_DB"]["asset_types"]) # sort list alphabetically
+
+
+        ###
+        # push to GUI
+        self.comboBox_LIST_attr_asset_type.clear()
+        self.comboBox_LIST_attr_asset_type.addItem('-- Select Asset Type --')
+        self.comboBox_LIST_attr_asset_type.addItems(self.LIST_attr_asset_type)
+        #
+        ###
+
+    
 
     """
     BTN PRESS FUNCTIONS
     """
-
     # On BTN press, Run through all validations inside ValidationUtils Class -- self.btn_validate.clicked.connect(self.run_through_all_validations)
     def run_through_all_validations(self):
         current_outputLog =  self.textEdit_output_log.toHtml()
         self.textEdit_output_log.setHtml(f'{current_outputLog} ------------')
 
-        self.lineEdit_loaded_asset_name.setText(self.get_asset_name())
+        self.lineEdit_loaded_asset_name.setText(self.UTILITY_get_asset_name())
 
         # If all Validation Checks PASS, print
         self.validations_all_passed = False
 
         # Build new Validation Instance based on get_asset_name function (grabs asset[0] in Maya Outliner)
-        Validate = mayapy_asset_validator_utils.ValidationUtils(self.get_asset_name(), self.textEdit_output_log)
+        Validate = mayapy_asset_validator_utils.ValidationUtils(self.UTILITY_get_asset_name(), self.textEdit_output_log)
 
         # invoke methods and get return values to check if validaions have all passed
         bool_single_asset_in_scene = Validate.is_single_asset_in_scene(self.label_validate_is_single_asset_in_scene)
@@ -154,7 +232,7 @@ class AssetValidator(QtWidgets.QWidget):
     # On BTN press, Freeze transforms for the specified object -- self.btn_freeze_transforms.clicked.connect(self.freeze_transforms)
     def freeze_transforms(self):
 
-        cmds.makeIdentity(self.get_asset_name(), apply=True, translate=True, rotate=True, scale=True)
+        cmds.makeIdentity(self.UTILITY_get_asset_name(), apply=True, translate=True, rotate=True, scale=True)
         self.run_through_all_validations()
 
     # On BTN press, reset pivot -- self.btn_reset_pivot.clicked.connect(self.reset_pivot)
@@ -162,18 +240,18 @@ class AssetValidator(QtWidgets.QWidget):
 
         ####
         # Store the original location
-        original_location = cmds.xform(self.get_asset_name(), query=True, rotatePivot=True, worldSpace=True)
+        original_location = cmds.xform(self.UTILITY_get_asset_name(), query=True, rotatePivot=True, worldSpace=True)
         # Move the object with the relative pivot point set to the origin
-        cmds.move(0, 0, 0, self.get_asset_name(), rotatePivotRelative=True)
+        cmds.move(0, 0, 0, self.UTILITY_get_asset_name(), rotatePivotRelative=True)
         # Freeze transforms for the specified object
-        cmds.makeIdentity(self.get_asset_name(), apply=True, translate=True, rotate=True, scale=True)
+        cmds.makeIdentity(self.UTILITY_get_asset_name(), apply=True, translate=True, rotate=True, scale=True)
         ####
         self.run_through_all_validations()
 
     def delete_construction_history(self):
 
         # Delete construction history for the specified object
-        cmds.delete(self.get_asset_name(), constructionHistory=True)
+        cmds.delete(self.UTILITY_get_asset_name(), constructionHistory=True, ch=True)
         self.run_through_all_validations()
 
     def delete_unused_shaders(self):
@@ -182,12 +260,16 @@ class AssetValidator(QtWidgets.QWidget):
         mel.eval('hyperShadePanelMenuCommand("hyperShadePanel1", "deleteUnusedNodes");')
         self.run_through_all_validations()
 
+    def help_url(self):
+            url = QUrl('https://github.com/BlakeXYZ/Maya-Tools/blob/main/_asset_validator/readme.md')  # Replace with the URL you want to open
+            QtGui.QDesktopServices.openUrl(url)
+
     """
-    HELPER FUNCTIONS
+    UTILITY FUNCTIONS
     Called inside self.btn_*.clicked.connect
     """
 
-    def get_asset_name(self):
+    def UTILITY_get_asset_name(self):
         # List all geometry
         list_geo = cmds.ls(geometry=True)
         mesh_info = list_geo[0]
@@ -198,6 +280,29 @@ class AssetValidator(QtWidgets.QWidget):
 
         return asset_name
     
+    def UTILITY_validation_btns_state(self):
+
+        icon_locked = QtGui.QPixmap(f':/lock.png').scaledToHeight(32)
+
+        # ENABLE UX if user has selected an ASSET TYPE
+        # FLUSH/RESET UX LOGIC anytime user selects comboBox
+        if self.comboBox_LIST_attr_asset_type.currentText() in self.LIST_attr_asset_type:
+                for validation_btn in self.LIST_validation_btns:
+                    validation_btn.setEnabled(True)
+                self.run_through_all_validations()
+        #DISABLE UX below comboBox if user has not selected ASSET TYPE
+        else:
+                for validation_btn in self.LIST_validation_btns:
+                    validation_btn.setEnabled(False)
+                # set validation label icons
+                for validation_label in self.LIST_validation_labels:
+                    validation_label.setPixmap(icon_locked)
+                # Clear Log
+                self.textEdit_output_log.setHtml(f'')
+
+
+    #TODO: Set Asset Attribute for Asset when ComboBox selected
+
 
     """
     OUTPUT LOG FUNCTIONS
@@ -270,4 +375,6 @@ def openWindow():
     AssetValidator.window.show()
     
 openWindow()
+
+
 

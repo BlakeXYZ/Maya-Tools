@@ -18,7 +18,67 @@
     <property name="topMargin">
      <number>14</number>
     </property>
-    <item row="9" column="0" colspan="3">
+    <item row="6" column="0" colspan="3">
+     <layout class="QVBoxLayout" name="vLayout_is_pivot_worldspace_zero">
+      <item>
+       <layout class="QHBoxLayout" name="hLayout_is_pivot_worldspace_zero">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>is_pivot_worldspace_zero</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_is_pivot_worldspace_zero">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_reset_pivot">
+        <property name="text">
+         <string>Reset Pivot</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0" colspan="3">
+     <layout class="QHBoxLayout" name="hLayout_validate_single_asset_in_scene">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>is_single_asset_in_scene</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_validate_is_single_asset_in_scene">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="13" column="1">
+     <widget class="QPushButton" name="btn_help_url">
+      <property name="text">
+       <string>Help</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0" colspan="3">
      <widget class="QPushButton" name="btn_validate">
       <property name="minimumSize">
        <size>
@@ -31,7 +91,107 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="0" colspan="3">
+    <item row="0" column="0" colspan="3">
+     <layout class="QHBoxLayout" name="hLayout_loaded_assed_name">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+          <underline>false</underline>
+         </font>
+        </property>
+        <property name="text">
+         <string>Loaded Asset Name:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_loaded_asset_name">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="13" column="2">
+     <widget class="QPushButton" name="btn_closeWindow">
+      <property name="text">
+       <string>Close</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="3">
+     <layout class="QHBoxLayout" name="hLayout_is_asset_name_valid">
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>is_asset_name_valid</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_is_asset_name_valid">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="7" column="0" colspan="3">
+     <layout class="QVBoxLayout" name="vLayout_is_construction_history_deleted">
+      <item>
+       <layout class="QHBoxLayout" name="hLayout_is_construction_history_deleted">
+        <item>
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>is_construction_history_deleted</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_is_construction_history_deleted">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_delete_construction_history">
+        <property name="text">
+         <string>Delete Construction History</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="12" column="0" colspan="3">
      <widget class="QTextEdit" name="textEdit_output_log">
       <property name="minimumSize">
        <size>
@@ -51,7 +211,81 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
     </item>
-    <item row="3" column="0" colspan="3">
+    <item row="9" column="0" colspan="3">
+     <widget class="Line" name="line">
+      <property name="lineWidth">
+       <number>5</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0" colspan="3">
+     <layout class="QVBoxLayout" name="vLayout_are_shading_groups_all_assigned">
+      <item>
+       <layout class="QHBoxLayout" name="hLayout_are_shading_groups_all_assigned">
+        <item>
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>are_shading_groups_all_assigned</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_are_shading_groups_all_assigned">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_delete_unused_shaders">
+        <property name="text">
+         <string>Delete Unused Shaders</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="0" colspan="3">
+     <layout class="QVBoxLayout" name="vLayout_is_transform_frozen">
+      <item>
+       <layout class="QHBoxLayout" name="hLayout_is_transform_frozen">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>is_transform_frozen</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_is_transform_frozen">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_freeze_transforms">
+        <property name="text">
+         <string>Freeze Transforms</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="4" column="0" colspan="3">
      <layout class="QHBoxLayout" name="hLayout_is_file_name_valid">
       <item>
        <widget class="QLabel" name="label_8">
@@ -72,7 +306,7 @@ p, li { white-space: pre-wrap; }
       </item>
      </layout>
     </item>
-    <item row="10" column="0" colspan="3">
+    <item row="11" column="0" colspan="3">
      <widget class="QWidget" name="widget_toggle_output_log" native="true">
       <layout class="QGridLayout" name="gridLayout">
        <property name="leftMargin">
@@ -119,204 +353,10 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
     </item>
-    <item row="8" column="0" colspan="3">
-     <widget class="Line" name="line">
-      <property name="lineWidth">
-       <number>5</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" colspan="3">
-     <layout class="QVBoxLayout" name="vLayout_is_transform_frozen">
-      <item>
-       <layout class="QHBoxLayout" name="hLayout_is_transform_frozen">
-        <item>
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>is_transform_frozen</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_is_transform_frozen">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_freeze_transforms">
-        <property name="text">
-         <string>Freeze Transforms</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="12" column="2">
-     <widget class="QPushButton" name="btn_closeWindow">
-      <property name="text">
-       <string>Close</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0" colspan="3">
-     <layout class="QVBoxLayout" name="vLayout_is_pivot_worldspace_zero">
-      <item>
-       <layout class="QHBoxLayout" name="hLayout_is_pivot_worldspace_zero">
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>is_pivot_worldspace_zero</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_is_pivot_worldspace_zero">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_reset_pivot">
-        <property name="text">
-         <string>Reset Pivot</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="6" column="0" colspan="3">
-     <layout class="QVBoxLayout" name="vLayout_is_construction_history_deleted">
-      <item>
-       <layout class="QHBoxLayout" name="hLayout_is_construction_history_deleted">
-        <item>
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>is_construction_history_deleted</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_is_construction_history_deleted">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_delete_construction_history">
-        <property name="text">
-         <string>Delete Construction History</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item row="1" column="0" colspan="3">
-     <layout class="QHBoxLayout" name="hLayout_validate_single_asset_in_scene">
+     <layout class="QHBoxLayout" name="hLayout_attr_asset_type">
       <item>
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>is_single_asset_in_scene</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_validate_is_single_asset_in_scene">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="2" column="0" colspan="3">
-     <layout class="QHBoxLayout" name="hLayout_is_asset_name_valid">
-      <item>
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>is_asset_name_valid</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_is_asset_name_valid">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="12" column="1">
-     <widget class="QPushButton" name="btn_help">
-      <property name="text">
-       <string>Help</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="0" colspan="3">
-     <layout class="QVBoxLayout" name="vLayout_are_shading_groups_all_assigned">
-      <item>
-       <layout class="QHBoxLayout" name="hLayout_are_shading_groups_all_assigned">
-        <item>
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>are_shading_groups_all_assigned</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_are_shading_groups_all_assigned">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_delete_unused_shaders">
-        <property name="text">
-         <string>Delete Unused Shaders</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="0" column="0" colspan="3">
-     <layout class="QHBoxLayout" name="hLayout_loaded_assed_name">
-      <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="label_5">
         <property name="font">
          <font>
           <weight>75</weight>
@@ -325,31 +365,12 @@ p, li { white-space: pre-wrap; }
          </font>
         </property>
         <property name="text">
-         <string>Loaded Asset Name:</string>
+         <string>Asset Type:</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_loaded_asset_name">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QComboBox" name="comboBox_LIST_attr_asset_type"/>
       </item>
      </layout>
     </item>
