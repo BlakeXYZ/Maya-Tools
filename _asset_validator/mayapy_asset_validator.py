@@ -55,7 +55,6 @@ class AssetValidator(QtWidgets.QWidget):
 
         ####
         # find interactive elements of UI
-
         self.comboBox_LIST_attr_asset_type = self.mainWidget.findChild(QtWidgets.QComboBox, 'comboBox_LIST_attr_asset_type')
 
         self.btn_freeze_transforms = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_freeze_transforms')
@@ -68,10 +67,9 @@ class AssetValidator(QtWidgets.QWidget):
         self.btn_closeWindow = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_closeWindow')
         self.btn_help_url = self.mainWidget.findChild(QtWidgets.QPushButton, 'btn_help_url')
 
-        
         ####
         # assign clicked handler to buttons
-        self.comboBox_LIST_attr_asset_type.activated.connect(self.UTILITY_validation_btns_state)
+        self.comboBox_LIST_attr_asset_type.activated.connect(self.validation_btns_state)
 
         self.btn_freeze_transforms.clicked.connect(self.freeze_transforms)
         self.btn_reset_pivot.clicked.connect(self.reset_pivot)
@@ -100,7 +98,6 @@ class AssetValidator(QtWidgets.QWidget):
         self.label_loaded_asset_name = self.mainWidget.findChild(QtWidgets.QLabel, 'label_loaded_asset_name')
         self.lineEdit_loaded_asset_name = self.mainWidget.findChild(QtWidgets.QLineEdit, 'lineEdit_loaded_asset_name')
 
-
         self.label_validate_is_single_asset_in_scene = self.mainWidget.findChild(QtWidgets.QLabel, 'label_validate_is_single_asset_in_scene')
         self.label_is_asset_name_valid = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_asset_name_valid')
         self.label_is_file_name_valid = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_file_name_valid')
@@ -109,7 +106,6 @@ class AssetValidator(QtWidgets.QWidget):
         self.label_is_pivot_worldspace_zero = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_pivot_worldspace_zero')
         self.label_is_construction_history_deleted = self.mainWidget.findChild(QtWidgets.QLabel, 'label_is_construction_history_deleted')
         self.label_are_shading_groups_all_assigned = self.mainWidget.findChild(QtWidgets.QLabel, 'label_are_shading_groups_all_assigned')
-
 
         ###
         ###
@@ -131,22 +127,20 @@ class AssetValidator(QtWidgets.QWidget):
             self.btn_delete_unused_shaders,
             self.btn_validate
         ]
-        self.SWITCH_validation_btns_isEnabled = False
-
 
         ###
         ###
         # Init Logic Functions to Run
         self.run_through_all_validations()
         self.populate_comboBox_LIST_attr_asset_type()
-        self.UTILITY_validation_btns_state()
+        self.validation_btns_state()
 
 
 
     """
     Init Combo Box Function
     """
-    # Populate Asset Type using JSON DataTable 
+    # Populate Asset Type using custom JSON DataTable 
     def populate_comboBox_LIST_attr_asset_type(self):
 
         ###
@@ -159,8 +153,7 @@ class AssetValidator(QtWidgets.QWidget):
         # Get Parent Folder Path
         script_directory_path = os.path.dirname(inspect.getfile(inspect.currentframe()))
         # Get Child Folder Path with JSON File
-        asset_validator_DB_path = os.path.join(script_directory_path, 'data\mayapy_asset_validator_DB.json')
-        print("asset_validator_DB", asset_validator_DB_path)
+        asset_validator_DB_path = os.path.join(script_directory_path, 'data', 'mayapy_asset_validator_DB.json') # Add os.path.sep to have code be OS-agnostic (instead of hard coded backslash in path.join) --OR-- use os.path.join with individual components separated by commas
         #
         ###
         
@@ -172,7 +165,6 @@ class AssetValidator(QtWidgets.QWidget):
             raise ValidationError(f'Error decoding JSON: {str(e)}')
         self.LIST_attr_asset_type = sorted(asset_validator_DB["asset_validator_DB"]["asset_types"]) # sort list alphabetically
 
-
         ###
         # push to GUI
         self.comboBox_LIST_attr_asset_type.clear()
@@ -181,11 +173,35 @@ class AssetValidator(QtWidgets.QWidget):
         #
         ###
 
-    
 
     """
     BTN PRESS FUNCTIONS
     """
+
+    # ENABLE UX if user has selected an ASSET TYPE
+    def validation_btns_state(self):
+
+        icon_locked = QtGui.QPixmap(f':/lock.png').scaledToHeight(32)
+
+        # ENABLE UX if user has selected an ASSET TYPE
+        # FLUSH/RESET UX LOGIC anytime user selects comboBox
+        if self.comboBox_LIST_attr_asset_type.currentText() in self.LIST_attr_asset_type:
+                for validation_btn in self.LIST_validation_btns:
+                    validation_btn.setEnabled(True)
+
+                self.UTILITY_set_attr_asset_type()
+                self.run_through_all_validations()
+
+        #DISABLE UX below comboBox if user has not selected ASSET TYPE
+        else:
+                for validation_btn in self.LIST_validation_btns:
+                    validation_btn.setEnabled(False)
+                # set validation label icons
+                for validation_label in self.LIST_validation_labels:
+                    validation_label.setPixmap(icon_locked)
+                # Clear Log
+                self.textEdit_output_log.setHtml(f'')
+
     # On BTN press, Run through all validations inside ValidationUtils Class -- self.btn_validate.clicked.connect(self.run_through_all_validations)
     def run_through_all_validations(self):
         current_outputLog =  self.textEdit_output_log.toHtml()
@@ -266,7 +282,7 @@ class AssetValidator(QtWidgets.QWidget):
 
     """
     UTILITY FUNCTIONS
-    Called inside self.btn_*.clicked.connect
+    Called inside BTN PRESS FUNCTIONS
     """
 
     def UTILITY_get_asset_name(self):
@@ -280,28 +296,37 @@ class AssetValidator(QtWidgets.QWidget):
 
         return asset_name
     
-    def UTILITY_validation_btns_state(self):
 
-        icon_locked = QtGui.QPixmap(f':/lock.png').scaledToHeight(32)
+    # Set Asset Attribute for Asset when ComboBox selected
+    # called inside validation_btns_state
+    def UTILITY_set_attr_asset_type(self):
 
-        # ENABLE UX if user has selected an ASSET TYPE
-        # FLUSH/RESET UX LOGIC anytime user selects comboBox
-        if self.comboBox_LIST_attr_asset_type.currentText() in self.LIST_attr_asset_type:
-                for validation_btn in self.LIST_validation_btns:
-                    validation_btn.setEnabled(True)
-                self.run_through_all_validations()
-        #DISABLE UX below comboBox if user has not selected ASSET TYPE
-        else:
-                for validation_btn in self.LIST_validation_btns:
-                    validation_btn.setEnabled(False)
-                # set validation label icons
-                for validation_label in self.LIST_validation_labels:
-                    validation_label.setPixmap(icon_locked)
-                # Clear Log
-                self.textEdit_output_log.setHtml(f'')
+        asset_name = self.UTILITY_get_asset_name()
+        # Use listRelatives to get all shapes under the transform node
+        mesh_info = cmds.listRelatives(asset_name, shapes=True)[0]
 
+        # Name of the string attribute
+        attr_is_AssetType = "Asset_Type"
+        # Value to set for the string attribute
+        attr_value = self.comboBox_LIST_attr_asset_type.currentText()
 
-    #TODO: Set Asset Attribute for Asset when ComboBox selected
+        # Check if Attr exsists, if NOT, create one
+        if not cmds.attributeQuery(attr_is_AssetType, node=mesh_info, exists=True):
+            try:
+                # Add a custom float attribute named "Asset_Type"
+                cmds.addAttr(mesh_info, longName=attr_is_AssetType, dataType="string")
+                print("Custom attribute 02 added successfully!")
+            except Exception as e:
+                print(f"Error adding custom attribute {attr_is_AssetType}: {str(e)}")
+        # else:
+            # print(f"{attr_name} already exists")
+
+        # Set the value for the "Asset_Type" attr
+        try:
+            cmds.setAttr(f"{mesh_info}.{attr_is_AssetType}", attr_value, type="string")
+            print("setAttr added successfully!")
+        except Exception as e:
+            print(f"Error setting attribute {attr_is_AssetType} to : {str(e)}")
 
 
     """

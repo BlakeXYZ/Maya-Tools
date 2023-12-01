@@ -207,7 +207,6 @@ class ValidationUtils:
         bool_construction_history_deleted = False
 
         my_history = cmds.listHistory(self.asset_name)
-        print(f'my_history {my_history}')
 
         # Check if the object has a construction history
         if len(my_history) == 1:
