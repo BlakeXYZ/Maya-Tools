@@ -27,9 +27,60 @@ Automate Validations per Asset to enforce standards and ensure consistency among
 ______
 ## <ins>Installation</ins>
 
-#### 🛠️ <em>under construction</em> 🛠️
 
-Explain how to install or set up your tool. Include any prerequisites or dependencies that need to be installed before using the tool. Provide step-by-step instructions if necessary.
+
+   1. Download '[Maya-Tools](https://github.com/BlakeXYZ/Maya-Tools/tree/main)' Repo
+
+<p align="center">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/ce521ecd-813e-4bc7-8645-60d330bc19b0" width="700">
+</p>
+
+   2. Extract **_asset_validator** Folder
+   3. Copy ****_asset_validator**** Folder to:
+
+<p align="center">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/fcca9b3b-5e75-41b7-ac4a-f3d51ef378a4" width="700">
+</p>
+     
+   Windows
+```
+\Users\USERNAME\Documents\maya\MAYAVERSION\scripts
+```
+   Linux
+```
+$HOME/maya/MAYAVERSION/scripts
+```
+   Mac
+```
+$HOME/Library/Preferences/Autodesk/maya/MAYAVERSION/scripts
+```
+   4. Launch / Restart Maya
+   5. Inside Script Editor, run:
+```py
+import os
+import sys
+import maya.cmds as cmds
+
+# Get the directory where Maya looks for user scripts
+maya_scripts_dir = cmds.internalVar(userScriptDir=True)
+
+# Add the asset_validator directory to the Python path
+asset_validator_dir = os.path.join(maya_scripts_dir, "_asset_validator")
+sys.path.append(asset_validator_dir)
+
+# Import the module
+try:
+    import mayapy_asset_validator
+except ImportError as e:
+    print("Import failed:", e)
+else:
+    # Launch Tool GUI
+    mayapy_asset_validator.openWindow()
+```
+<p align="center">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/84be79e9-2f6d-4003-a321-bfec4fa5340a" width="300">
+</p>
+
 
 ____________
 ## <ins>Quick Start</ins>
