@@ -3,6 +3,31 @@ import maya.mel as mel
 import os
 
 
+
+
+"""
+import os
+import sys
+import maya.cmds as cmds
+
+# Get the directory where Maya looks for user scripts
+maya_scripts_dir = cmds.internalVar(userScriptDir=True)
+
+# Add the asset_validator directory to the Python path
+asset_validator_dir = os.path.join(maya_scripts_dir, "_asset_validator")
+sys.path.append(asset_validator_dir)
+
+# Import the module
+try:
+    import mayapy_asset_validator
+except ImportError as e:
+    print("Import failed:", e)
+else:
+    # Launch Tool GUI
+    mayapy_asset_validator.openWindow()
+"""
+
+
 class ValidationError(Exception):
     pass
 
@@ -60,31 +85,31 @@ print(f'mesh_shapes = {mesh_shapes}')
 #     print(f"Error adding custom attribute: {str(e)}")
 
 
+###############
+
+# Name of the string attribute
+string_attribute_name = "Asset_Type"
+
+# Value to set for the string attribute
+new_string_value = "Hello, World!"
 
 
-# # Name of the string attribute
-# string_attribute_name = "Asset_Type"
+try:
+    # Add a custom float attribute named "myCustomAttribute"
+    cmds.addAttr(asset_name, longName=string_attribute_name, dataType="string")
+    print("Custom attribute 02 added successfully!")
+except Exception as e:
+    print(f"Error adding custom attribute 02: {str(e)}")
 
-# # Value to set for the string attribute
-# new_string_value = "Hello, World!"
+try:
+    # Set the default value for the string attribute
+    cmds.setAttr(f"{asset_name}.{string_attribute_name}", "aaa", type="string")
 
+    print("setAttr added successfully!")
+except Exception as e:
+    print(f"Error setAttr: {str(e)}")
 
-# try:
-#     # Add a custom float attribute named "myCustomAttribute"
-#     cmds.addAttr(mesh_info, longName=string_attribute_name, dataType="string")
-#     print("Custom attribute 02 added successfully!")
-# except Exception as e:
-#     print(f"Error adding custom attribute 02: {str(e)}")
-
-# try:
-#     # Set the default value for the string attribute
-#     cmds.setAttr(f"{mesh_info}.{string_attribute_name}", "aaa", type="string")
-
-#     print("setAttr added successfully!")
-# except Exception as e:
-#     print(f"Error setAttr: {str(e)}")
-
-
+###################
 
 # try:
 #     # Set the value of the custom string attribute

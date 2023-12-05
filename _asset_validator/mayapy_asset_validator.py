@@ -277,7 +277,7 @@ class AssetValidator(QtWidgets.QWidget):
         self.run_through_all_validations()
 
     def help_url(self):
-            url = QUrl('https://github.com/BlakeXYZ/Maya-Tools/blob/main/_asset_validator/readme.md')  # Replace with the URL you want to open
+            url = QUrl('https://github.com/BlakeXYZ/Maya-Tools/tree/main/_asset_validator#readme')  # Replace with the URL you want to open
             QtGui.QDesktopServices.openUrl(url)
 
     """
@@ -286,7 +286,8 @@ class AssetValidator(QtWidgets.QWidget):
     """
 
     def UTILITY_get_asset_name(self):
-        # List all geometry
+        
+        # List all geometry     
         list_geo = cmds.ls(geometry=True)
         mesh_info = list_geo[0]
 
@@ -302,8 +303,8 @@ class AssetValidator(QtWidgets.QWidget):
     def UTILITY_set_attr_asset_type(self):
 
         asset_name = self.UTILITY_get_asset_name()
-        # Use listRelatives to get all shapes under the transform node
-        mesh_info = cmds.listRelatives(asset_name, shapes=True)[0]
+        # # Use listRelatives to get all shapes under the transform node
+        # mesh_info = cmds.listRelatives(asset_name, shapes=True)[0]
 
         # Name of the string attribute
         attr_is_AssetType = "Asset_Type"
@@ -311,10 +312,10 @@ class AssetValidator(QtWidgets.QWidget):
         attr_value = self.comboBox_LIST_attr_asset_type.currentText()
 
         # Check if Attr exsists, if NOT, create one
-        if not cmds.attributeQuery(attr_is_AssetType, node=mesh_info, exists=True):
+        if not cmds.attributeQuery(attr_is_AssetType, node=asset_name, exists=True):
             try:
                 # Add a custom float attribute named "Asset_Type"
-                cmds.addAttr(mesh_info, longName=attr_is_AssetType, dataType="string")
+                cmds.addAttr(asset_name, longName=attr_is_AssetType, dataType="string")
                 print("Custom attribute 02 added successfully!")
             except Exception as e:
                 print(f"Error adding custom attribute {attr_is_AssetType}: {str(e)}")
@@ -323,7 +324,7 @@ class AssetValidator(QtWidgets.QWidget):
 
         # Set the value for the "Asset_Type" attr
         try:
-            cmds.setAttr(f"{mesh_info}.{attr_is_AssetType}", attr_value, type="string")
+            cmds.setAttr(f"{asset_name}.{attr_is_AssetType}", attr_value, type="string")
             print("setAttr added successfully!")
         except Exception as e:
             print(f"Error setting attribute {attr_is_AssetType} to : {str(e)}")

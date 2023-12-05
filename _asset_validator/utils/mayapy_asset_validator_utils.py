@@ -169,8 +169,8 @@ class ValidationUtils:
 
         folder_name, file_name = self.get_folder_and_file_name()
 
-        # compare stored variables
-        if file_name == folder_name:
+        # compare stored variables and Validation for file_name 'unsaved scene'
+        if file_name == folder_name and file_name is not None:
             bool_file_name_is_valid = True
         else:
             bool_file_name_is_valid = False
@@ -178,7 +178,11 @@ class ValidationUtils:
         # Set GUI Label for Validation Func
         self.validation_label_toggle(ui_label_object, bool_file_name_is_valid)
         # Set Output Log Text
-        text_validation_fail_reason = (f'-- file_name: "{file_name}" does not match folder_name: "{folder_name}"')
+        if file_name == None: #  Validation for file_name 'unsaved scene'
+            text_validation_fail_reason = (f'-- Unsaved Maya Scene!')
+        else:
+            text_validation_fail_reason = (f'-- file_name: "{file_name}" does not match folder_name: "{folder_name}"')
+
         self.print_to_output_log(bool_file_name_is_valid, text_validation_name, text_validation_fail_reason)
 
         return bool_file_name_is_valid
@@ -188,13 +192,14 @@ class ValidationUtils:
 
         # Get the current scene name
         file_path = cmds.file(q=True, sceneName=True)
-        if not file_path:
-            file_path = 'Unsaved Maya Scene!'
-
-        # find and store folder, file and asset names to compare
-        folder_name = file_path.rsplit('/', 2)[-2]
-        file_name_w_extension = file_path.rsplit('/', 2)[-1]
-        file_name, file_extension = os.path.splitext(file_name_w_extension)
+        if not file_path:       # Validation for file_name 'unsaved scene'
+            folder_name = None
+            file_name = None
+        else:
+            # find and store folder, file and asset names to compare
+            folder_name = file_path.rsplit('/', 2)[-2]
+            file_name_w_extension = file_path.rsplit('/', 2)[-1]
+            file_name, file_extension = os.path.splitext(file_name_w_extension)
 
         return folder_name, file_name
     ####
