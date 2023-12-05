@@ -1,7 +1,7 @@
   ---
  ### Asset Validator
 
-[GitHub Page](https://github.com/BlakeXYZ/Maya-Tools/blob/main/_asset_validator/readme.md) - Automate Validations per Asset to enforce standards and ensure consistency amongst team members.
+[GitHub Page](https://github.com/BlakeXYZ/Maya-Tools/tree/main/_asset_validator#readme) - Automate Validations per Asset to enforce standards and ensure consistency amongst team members.
 
 <p align="center">  
 <img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/432e6654-deda-4edb-a626-bb0d40c06a76" width="700">
