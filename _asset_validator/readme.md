@@ -1,4 +1,6 @@
-# Asset Validator
+<p align="center">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/d266ef23-06fd-4292-a3e8-1302c3d6826b">
+</p>
 
 ## <ins>Overview</ins>
 
