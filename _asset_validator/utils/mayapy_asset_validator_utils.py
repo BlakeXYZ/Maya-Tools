@@ -4,10 +4,6 @@ import maya.cmds as cmds
 import maya.mel as mel
 from PySide2 import QtUiTools, QtCore, QtGui, QtWidgets
 
-
-class ValidationError(Exception):
-    pass
-
 class ValidationUtils:
 
     def __init__(self, asset_name, textEdit_output_log): #constructor
@@ -18,11 +14,6 @@ class ValidationUtils:
     HELPER FUNCTIONS
     Called inside each Validation Function
     """
-#####
-#TODO: Differentiate between ERROR WARNING and SUCCESS
-#
-#      Print to Maya Output Log and provide more context to Failed Validations
-#####
 
     def print_to_output_log(self, bool_check, text_validation_name, text_validation_fail_reason=None):
 
@@ -312,41 +303,6 @@ class ValidationUtils:
         ### If you read that script, you will see that the process of finding unused nodes is multiple stages. It looks at shading groups, and connections, and texture nodes
         ### Then converted mel function to py cmds
         #####
-
-
-    """
-    """
-
-
-#################
-#################
-#################
-#################
-#################
-#################
-
-
-
-### RAISE VALIDATION example
-# # CHECK if number of selected assets is ONE
-# if len(selected_assets) != 1:
-#     raise ValidationError(f'Please select only 1 Master Material in Content Browser')
-
-
-#################
-#################
-
-
-
-
-# #################
-# ##                                                                                                        Validation - Choose Asset Type (JSON storage)
-
-
-# ASSET TYPE assignment for:
-#   UE Import Material Attachment
-#   UE Import Initial Folder Hierarchy Setup
-#   UE Import LOD Tag
 
 
 
