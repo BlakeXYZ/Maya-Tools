@@ -1,0 +1,9 @@
+# Ignore .vs directory
+/.vs/
+
+# Ignore pycache directory
+/__pycache__/
+/utils/__pycache__/
+
+# Ignore mayaSwatches
+/asset_validation_example/.mayaSwatches/
