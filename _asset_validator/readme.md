@@ -87,25 +87,48 @@ else:
 ____________
 ## <ins>Quick Start</ins>
 
-#### 🛠️ <em>under construction</em> 🛠️
+#### Asset Type
 
-Describe how to use your tool. Include examples or code snippets to illustrate common use cases. Explain any command-line options, configuration settings, or parameters that users need to be aware of.
-
-______
-## <ins>Documentation</ins>
-
-#### 🛠️ <em>under construction</em> 🛠️
-
-Provide a link to more detailed documentation if it exists. This could be a link to a separate documentation file or an external website. Include information on where users can find additional resources, tutorials, or support.
-
-
-<div align="center">placeholder text.
-</div>
-<br>
-
-a
+- Upon launching the Tool, user must select Asset Type before continuing Validation.
+- Asset Type Data is pulled from 'data\mayapy_asset_validator_DB.json'
+- Once set, the Asset Type Attribute is created and stored in the object. User can process the Asset based on unique Metadata in other programs. (e.g. [Unreal Engine FBX Asset Metadata Pipeline](https://docs.unrealengine.com/5.1/en-US/fbx-asset-metadata-pipeline-in-unreal-engine/))
 
 <p align="center">
-   
-<img src="" width="700">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/c43e806d-05e5-4f14-b844-fc915dc69c65" width="700">
 </p>
+
+#### is_single_asset_in_scene
+
+- Checks Outliner and validates whether or not a single asset is present
+
+#### is_asset_name_valid
+
+- Compares against Folder name that the Maya Scene is saved in
+- asset_name == folder_name
+
+#### is_file_name_valid
+
+- Validates whether or not the Maya Scene is saved
+- Compares Folder Name to Maya Scene
+- file_name == folder_name
+
+#### is_transforms_frozen
+
+- Checks if translate_value, rotate_value, scale_value is equal to 0 
+
+#### is_pivot_worldspace_zero
+
+- Checks if pivot_location (cmds.xform) is equal to 0 
+
+#### is_construction_history_deleted
+
+- Checks if Construction History on Asset is equal to 1
+
+#### are_shading_groups_all_assigned
+
+- runs through method 'is_any_shading_group_unused' (Using snippet of Hypershade 'Delete Unused Nodes' MEL to validate)
+
+  <br>
+
+______
+
