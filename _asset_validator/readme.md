@@ -10,7 +10,7 @@ Automate Validations per Asset to enforce standards and ensure consistency among
 <br>
 
 <p align="center">  
-<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/432e6654-deda-4edb-a626-bb0d40c06a76" width="700">
+<img src="https://github.com/BlakeXYZ/Maya-Tools/assets/37947050/b68905a7-a0ab-4905-82cb-b2749777f890" width="700">
 </p>
 
 
