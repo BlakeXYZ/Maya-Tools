@@ -1,0 +1,5 @@
+# Ignore pycache directory
+/__pycache__/
+
+# Ignore auth.py 
+/auth.py
