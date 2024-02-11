@@ -2,6 +2,8 @@ from PySide2 import QtUiTools, QtCore, QtGui, QtWidgets
 import sys, os
 
 import testFetch_jira_lib
+from pprint import pprint
+
 
 class ValidationError(Exception):
     pass
@@ -46,44 +48,60 @@ class jira_maya_livelink(QtWidgets.QMainWindow):
         ###
         ###
         # assign clicked handler to buttons
+        self.comboBox_transitions.currentIndexChanged.connect(self.handleComboBoxSelection)
+
         self.btn_01.clicked.connect(self.print_to_log)
         self.btn_02.clicked.connect(self.closeWindow)
 
 
-
+#TODO: Tidy Up Code below, make more accessible 
+############
         # Iterate through the dictionary items and print them to QTextEdit
         formatted_output = '\n'.join([f"{key}: {value}" for key, value in testFetch_jira_lib.DICT_issue_fields_info.items()])
 
         self.text_issueFieldsInfo.setPlainText(formatted_output)
 
-
-
-
+############
         # Iterate through the dictionary and add names to QComboBox
+        # and store transition_id data inside each index, can later be retrieved (see handleComboBoxSelection)
         for transition_id, transition_info in testFetch_jira_lib.DICT_issue_transitions_info.items():
             name = transition_info['name']
             self.comboBox_transitions.addItem(name, userData=transition_id)
-            
+
         # Set the current index if set_transition is True
             if transition_info['set_transition']:
                 index = self.comboBox_transitions.findData(transition_id)
                 if index != -1:
                     self.comboBox_transitions.setCurrentIndex(index)
 
-                    
 
-        # Connect a function to handle the QComboBox item selection
-        self.comboBox_transitions.currentIndexChanged.connect(self.handleComboBoxSelection)
+
 
     # Function to handle QComboBox item selection
     def handleComboBoxSelection(self, index):
-        selected_transition_id = self.comboBox_transitions.itemData(index)
-        selected_transition_info = testFetch_jira_lib.DICT_issue_transitions_info.get(selected_transition_id)
-        if selected_transition_info:
-            print(f"Selected Transition ID: {selected_transition_id}")
-            print(f"Selected Transition Name: {selected_transition_info['name']}")
-            print(f"Set Transition: {selected_transition_info['set_transition']}")
 
+        print('hello')
+
+        # retrieve stored data inside current index
+        selected_transition_id = self.comboBox_transitions.itemData(index)
+
+        # Set all 'set_transition' values to False 
+        for transition_id, transition_info in testFetch_jira_lib.DICT_issue_transitions_info.items():
+            transition_info['set_transition'] = False
+
+        # Set the selected transition to True
+        # access Dict key that matches the currently selected_transition_id and set to True
+        if selected_transition_id in testFetch_jira_lib.DICT_issue_transitions_info:
+            testFetch_jira_lib.DICT_issue_transitions_info[selected_transition_id]['set_transition'] = True
+
+        pprint(testFetch_jira_lib.DICT_issue_transitions_info)  # Print after the update
+
+        testFetch_jira_lib.push_transition_to_jira(selected_transition_id)
+
+
+
+############
+            
         
     
     """

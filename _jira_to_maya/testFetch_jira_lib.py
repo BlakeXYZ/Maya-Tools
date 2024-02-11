@@ -72,9 +72,9 @@ DICT_issue_fields_info = {
 # # Find the transition ID for the specified status
 transitions = jira.transitions(issue)
 
-# Format available transitions for clean printing
-formatted_transitions = json.dumps(transitions, indent=4)
-print(f"Available Transitions for {issue_key}: {formatted_transitions}")
+# # Format available transitions for clean printing
+# formatted_transitions = json.dumps(transitions, indent=4)
+# print(f"Available Transitions for {issue_key}: {formatted_transitions}")
 
 DICT_issue_transitions_info = {}
 
@@ -99,15 +99,13 @@ pprint(DICT_issue_transitions_info)
 
 
     
-    
 
 
 
+def push_transition_to_jira(selected_transition_id):
 
-
-
-
-
+    # Perform the transition
+    jira.transition_issue(issue, selected_transition_id)
 
 
 # # Find the next status transition
