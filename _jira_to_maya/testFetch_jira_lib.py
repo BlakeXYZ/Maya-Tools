@@ -25,6 +25,7 @@ jira = JIRA(
 #         issuetype:  {singleIssue.fields.issuetype.name}
 #         status:     {singleIssue.fields.status.name}
 #         assignee:   {singleIssue.fields.assignee}
+#         label:      {singleIssue.fields.labels}
 #         ''')
 
 
@@ -41,7 +42,8 @@ DICT_issue_fields_info = {
     'summary': issue.fields.summary,
     'issuetype': issue.fields.issuetype.name,
     'status': issue.fields.status.name,
-    'assignee': issue.fields.assignee
+    'assignee': issue.fields.assignee,
+    'label': issue.fields.labels
 }
 
 
@@ -95,9 +97,6 @@ for transition in transitions:
 
 # Now DICT_transitions contains the transitions information
 pprint(DICT_issue_transitions_info)
-    
-
-
     
 
 
